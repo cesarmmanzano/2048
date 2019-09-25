@@ -1,6 +1,7 @@
 package game_2048;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.*;
 
 public class Tile {
@@ -25,6 +26,17 @@ public class Tile {
     private int x;
     private int y;
 
+    //========================================================================//
+    //ABOUT aNIMATION
+    private boolean beginningAnimation = true;
+    private double scaleFirst = 0.1;    //growing effect (melhorar comentario) 
+    private BufferedImage beginningImage;
+    
+    private boolean combineAnimation = false;
+    private double scaleCombine = 1.2;
+    private BufferedImage combineImage;
+    //========================================================================//
+    
     private boolean canCombine = true;
 
     //========================================================================//
@@ -37,6 +49,10 @@ public class Tile {
         
         //Nova imagem do bloco
         tileImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB); 
+        
+        beginningImage = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_ARGB);
+        combineImage = new BufferedImage(WIDTH*2,HEIGHT*2,BufferedImage.TYPE_INT_ARGB);
+        
         drawImage(); //Desenha número desejado
     }
 
@@ -106,13 +122,45 @@ public class Tile {
 
     //========================================================================//
     
-    public void update() {
+    public void update() {  //update all the animation
+        if(beginningAnimation){
+            AffineTransform transform = new AffineTransform();
+            transform.translate(WIDTH/2 - scaleFirst * WIDTH/2,HEIGHT/2 - scaleFirst * HEIGHT/2);   //it will go into the middle and say how big is the new transformed image,than find half that image and move over that much
+            transform.scale(scaleFirst, scaleFirst);
+            Graphics2D g2d = (Graphics2D)beginningImage.getGraphics();//do the drawing
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            g2d.setColor(new Color(0,0,0,0));
+            g2d.fillRect(0, 0, WIDTH, HEIGHT);
+            g2d.drawImage(tileImage, transform, null);
+            scaleFirst += 0.1;
+            g2d.dispose(); 
+            if(scaleFirst >= 1) beginningAnimation = false;
+        }else if(combineAnimation){
+            AffineTransform transform = new AffineTransform();
+            transform.translate(WIDTH/2 - scaleCombine * WIDTH/2,HEIGHT/2 - scaleCombine * HEIGHT/2);   //it will go into the middle and say how big is the new transformed image,than find half that image and move over that much
+            transform.scale(scaleCombine, scaleCombine);
+            Graphics2D g2d = (Graphics2D)combineImage.getGraphics();//do the drawing
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            g2d.setColor(new Color(0,0,0,0));
+            g2d.fillRect(0, 0, WIDTH, HEIGHT);
+            g2d.drawImage(tileImage, transform, null);
+            scaleCombine -= 0.05;
+            g2d.dispose(); 
+            if(scaleCombine <= 1) combineAnimation = false;
+        }
     }
 
     //========================================================================//
     
     public void render(Graphics2D g) {
-        g.drawImage(tileImage, x, y, null);
+        if(beginningAnimation){ //se eh o inicio
+            g.drawImage(beginningImage,x,y,null);
+        }else if(combineAnimation){ //se esta combinando
+            g.drawImage(combineImage,(int)(x + WIDTH/2 - scaleCombine * WIDTH/2),(int)(y + HEIGHT/2 - scaleCombine * HEIGHT/2),null);
+        }else{      //se nao eh nenhum dos dois, portanto provavelmente se nao esta combinando (choque de duas tiles diferentes) - checar e analisar
+            g.drawImage(tileImage, x, y, null); 
+        }
+        
     }
 
     //========================================================================//
@@ -160,4 +208,15 @@ public class Tile {
         this.y = y;
     }
 
+    public boolean isCombineAnimation() {
+        return combineAnimation;
+    }
+
+    public void setCombineAnimation(boolean combineAnimation) {
+        this.combineAnimation = combineAnimation;
+        if(combineAnimation)scaleCombine = 1.2; //reset the scale combine the fist (the spawn) dont need to be reseted because tiles oonly spawn once
+    }
+
+    
+    
 }
