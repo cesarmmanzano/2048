@@ -8,29 +8,41 @@ import java.util.Random;
 
 public class Gameboard {
 
+    //Board será 4x4
     public static final int ROWS = 4;
     public static final int COLS = 4;
 
-    private final int startingTile = 2; //number of tiles spawning in the begining
+    private int startingTile; //Numero de blocos iniciais 
     private Tile[][] board;
-    private boolean dead;   //loose
-    private boolean won;    //win
-    private BufferedImage gameBoard;//background of the gameboard -gray background etc
+
+    private boolean dead; //Verifica derrota      
+    private boolean won;  //Verifica vitória  
+
+    private BufferedImage gameBoard; //Background gameBoard
     private BufferedImage finalBoard;
+
+    private Color backgroundBoard;  //Cor do backgrond
+    private Color backgroundRect;  //Cor dos retangulos
+
+    //Posição para desenhar na tela
     private int x;
     private int y;
 
-    private static int SPACING = 10; //SPACE BETWEEN TILES IN PIXELS
-    public static int BOARD_WIDTH = (COLS + 1) * SPACING + COLS * Tile.WIDTH; //COLUNAS +1 * ESPACO ENTRE TILES + COLUNAS * COMPRIMENTO DE TILES
+    private static int SPACING = 10; //Espaço entre as peças do jogo
+
+    //Pega altura e largura em pixel do board
+    public static int BOARD_WIDTH = (COLS + 1) * SPACING + COLS * Tile.WIDTH;
     public static int BOARD_HEIGHT = (ROWS + 1) * SPACING + ROWS * Tile.HEIGHT;
 
     private boolean hasStarted;
 
-    //constructor
+    //========================================================================//
     public Gameboard(int x, int y) {
         this.x = x;
         this.y = y;
-        board = new Tile[ROWS][COLS];
+
+        board = new Tile[ROWS][COLS];   //Board 4x4
+
         gameBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
         finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
@@ -38,12 +50,17 @@ public class Gameboard {
         start();
     }
 
+    //========================================================================//
+    //Cria backgorund do Board
     private void createBoardImage() {
-        /*creat the background of the gameboard*/
         Graphics2D g = (Graphics2D) gameBoard.getGraphics();
-        g.setColor(Color.darkGray);
+        backgroundBoard = new Color(0x776E65); //Cor de fundo do Board
+        g.setColor(backgroundBoard);
+
         g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
-        g.setColor(Color.lightGray);
+
+        backgroundRect = new Color(0xD8BFD8); //Cor de fundo do retangulo
+        g.setColor(backgroundRect);
 
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
@@ -55,23 +72,41 @@ public class Gameboard {
 
     }
 
+    //========================================================================//
+    //Para spawnar 1 ou 2 blocos iniciais
+    private int RandomStartingTiles() {
+
+        while (startingTile == 0) {
+            Random random = new Random();
+            startingTile = random.nextInt(3);
+        }
+        return startingTile;
+    }
+
+    //========================================================================//
     private void start() {
-        for (int i = 0; i < startingTile; i++) {
+        for (int i = 0; i < RandomStartingTiles(); i++) {
             spawnRandom();
         }
 
     }
 
+    //========================================================================//
+    /*
+        Spawn randomico de blocos
+        Checa todas as posições do board e escolhe uma randomicamente
+    */
     private void spawnRandom() {
         Random random = new Random();
         boolean notvalid = true;
+        
         while (notvalid) {
             int location = random.nextInt(ROWS * COLS);
-            int row = location / ROWS;        //THIS 2 IS TO GET THE LOCATION OF AN EMPTY SPACE
+            int row = location / ROWS;
             int col = location % COLS;
             Tile currently = board[row][col];
             if (currently == null) {
-                int value = random.nextInt(10) < 9 ? 2 : 4; //condense if statement 0 to 9 if its less than 9 going 2 else 4(90%-2 10%-4)
+                int value = random.nextInt(10) < 9 ? 2 : 4;
                 Tile tile = new Tile(value, getTileX(col), getTileY(row));
                 board[row][col] = tile;
                 notvalid = false;
@@ -79,19 +114,11 @@ public class Gameboard {
         }
     }
 
-    public int getTileX(int col) {
-        return SPACING + col * Tile.WIDTH + col * SPACING;    //the space in pixels 
-    }                                                       //lembrar o acesso de cada linha linha e apenas mudando a coluna
-
-    public int getTileY(int row) {
-        return SPACING + row * Tile.HEIGHT + row * SPACING; //lembrar o acesso de cada coluna se da por manter a coluna e mudar a linha
-    }
-
+    //========================================================================//
     public void render(Graphics2D g) {
         Graphics2D g2d = (Graphics2D) finalBoard.getGraphics();
         g2d.drawImage(gameBoard, 0, 0, null);
 
-        //draw the tiles
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 Tile currently = board[row][col];
@@ -106,6 +133,7 @@ public class Gameboard {
         g2d.dispose();
     }
 
+    //========================================================================//
     public void update() {
         checkKeys();
 
@@ -125,6 +153,7 @@ public class Gameboard {
         }
     }
 
+    //========================================================================//
     private void resetPosition(Tile current, int row, int col) {
         if (current == null) {
             return;
@@ -156,6 +185,8 @@ public class Gameboard {
         }
     }
 
+    //========================================================================//
+    //Checa se é possivel mover as peças
     private boolean move(int row, int col, int horizontalDirection, int verticalDirection, Direction dir) {
         boolean canMove = false;
 
@@ -166,6 +197,7 @@ public class Gameboard {
         boolean move = true;
         int newCol = col;
         int newRow = row;
+
         while (move) {
             newCol += horizontalDirection;
             newRow += verticalDirection;
@@ -177,7 +209,7 @@ public class Gameboard {
                 board[newRow - verticalDirection][newCol - horizontalDirection] = null;
                 board[newRow][newCol].setSlideTo(new Point(newRow, newCol));
                 canMove = true;
-            } else if (board[newRow][newCol].getValue() == current.getValue() && board[newRow][newCol].canCombine()) { //se da pra combinar
+            } else if (board[newRow][newCol].getValue() == current.getValue() && board[newRow][newCol].iscanCombine()) { //se da pra combinar
                 board[newRow][newCol].setCanCombine(false);
                 board[newRow][newCol].setValue(board[newRow][newCol].getValue() * 2);
                 canMove = true;
@@ -189,9 +221,12 @@ public class Gameboard {
                 move = false;
             }
         }
+
         return canMove;
     }
 
+    //========================================================================//
+    //Checa limite do board
     private boolean checkOutOfBounds(Direction dir, int row, int col) {
         if (dir == Direction.LEFT) {
             return col < 0;
@@ -205,17 +240,18 @@ public class Gameboard {
         return false;
     }
 
+    //========================================================================//
+    //Move as peças do jogo
     private void moveTiles(Direction dir) {
-        boolean canMove = false; //if hit the direction its eable to do it
+        boolean canMove = false;
         int horizontalDirection = 0;
         int verticalDirection = 0;
 
-        //da pra fazer com switch case
         if (dir == Direction.LEFT) {
             horizontalDirection = -1;
             for (int row = 0; row < ROWS; row++) {
                 for (int col = 0; col < COLS; col++) {
-                    if (!canMove) {   //se nao foi movido ainda
+                    if (!canMove) {
                         canMove = move(row, col, horizontalDirection, verticalDirection, dir);
                     } else {
                         move(row, col, horizontalDirection, verticalDirection, dir);
@@ -226,7 +262,7 @@ public class Gameboard {
             horizontalDirection = +1;
             for (int row = 0; row < ROWS; row++) {
                 for (int col = COLS - 1; col >= 0; col--) {
-                    if (!canMove) {   //se nao foi movido ainda
+                    if (!canMove) {
                         canMove = move(row, col, horizontalDirection, verticalDirection, dir);
                     } else {
                         move(row, col, horizontalDirection, verticalDirection, dir);
@@ -237,7 +273,7 @@ public class Gameboard {
             verticalDirection = -1;
             for (int row = 0; row < ROWS; row++) {
                 for (int col = 0; col < COLS; col++) {
-                    if (!canMove) {   //se nao foi movido ainda
+                    if (!canMove) {
                         canMove = move(row, col, horizontalDirection, verticalDirection, dir);
                     } else {
                         move(row, col, horizontalDirection, verticalDirection, dir);
@@ -248,14 +284,14 @@ public class Gameboard {
             verticalDirection = 1;
             for (int row = ROWS - 1; row >= 0; row--) {
                 for (int col = 0; col < COLS; col++) {
-                    if (!canMove) {   //se nao foi movido ainda
+                    if (!canMove) {
                         canMove = move(row, col, horizontalDirection, verticalDirection, dir);
                     } else {
                         move(row, col, horizontalDirection, verticalDirection, dir);
                     }
                 }
             }
-        } else { //this is like a catch
+        } else {
             System.out.println(dir + "is not a valid direction.");
         }
 
@@ -275,8 +311,13 @@ public class Gameboard {
 
     }
 
+    //========================================================================//
+    /*
+     Checa fim do jogo
+     Percorre todas as peças checando a combinação nos arredores
+     Se não houver cobinação possível -> end game
+     */
     private void checkDead() {
-        //it will go at all tiles and check it`s surrounding to se if there is any possible combination
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 if (board[row][col] == null) {
@@ -288,9 +329,10 @@ public class Gameboard {
             }
         }
         dead = true;
-        //setHighScore(score);
     }
 
+    //========================================================================//
+    //Checa arredores das peças
     private boolean checkSurroundingTiles(int row, int col, Tile current) {
         if (row > 0) {
             Tile check = board[row - 1][col];
@@ -331,34 +373,74 @@ public class Gameboard {
         return false;
     }
 
+    //========================================================================//
+    //Checa qual tecla foi pressionada para mover a peça
     private void checkKeys() {
+        //LEFT
         if (Keyboard.typed(KeyEvent.VK_LEFT)) {
-            //move tiles left
             moveTiles(Direction.LEFT);
             if (!hasStarted) {
                 hasStarted = true;
             }
         }
+        if (Keyboard.typed(KeyEvent.VK_A)) {
+            moveTiles(Direction.LEFT);
+            if (!hasStarted) {
+                hasStarted = true;
+            }
+        }
+
+        //RIGHT
         if (Keyboard.typed(KeyEvent.VK_RIGHT)) {
-            //move tiles right
             moveTiles(Direction.RIGHT);
             if (!hasStarted) {
                 hasStarted = true;
             }
         }
+        if (Keyboard.typed(KeyEvent.VK_D)) {
+            moveTiles(Direction.RIGHT);
+            if (!hasStarted) {
+                hasStarted = true;
+            }
+        }
+
+        //UP
         if (Keyboard.typed(KeyEvent.VK_UP)) {
-            //move tiles up
             moveTiles(Direction.UP);
             if (!hasStarted) {
                 hasStarted = true;
             }
         }
+        if (Keyboard.typed(KeyEvent.VK_W)) {
+            moveTiles(Direction.UP);
+            if (!hasStarted) {
+                hasStarted = true;
+            }
+        }
+
+        //DOWN
         if (Keyboard.typed(KeyEvent.VK_DOWN)) {
-            //move tiles down
+            moveTiles(Direction.DOWN);
+            if (!hasStarted) {
+                hasStarted = true;
+            }
+        }
+        if (Keyboard.typed(KeyEvent.VK_S)) {
             moveTiles(Direction.DOWN);
             if (!hasStarted) {
                 hasStarted = true;
             }
         }
     }
+
+    //========================================================================//
+    //Getters e Setters
+    public int getTileX(int col) {
+        return SPACING + col * Tile.WIDTH + col * SPACING;
+    }
+
+    public int getTileY(int row) {
+        return SPACING + row * Tile.HEIGHT + row * SPACING;
+    }
+
 }

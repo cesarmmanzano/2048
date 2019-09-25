@@ -5,16 +5,19 @@ import javax.swing.*;
 public class Start extends JPanel {
 
     public static void main(String[] args) {
+        
+        //Cria novo jogo
         Game game = new Game();
 
+        //Cria janela do JFrame
         JFrame window = new JFrame("2048");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //coloca como defalt a saida com o x "se nao me engano"
-        window.setResizable(false); //nao permite mudancao de tamanho na janela
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //Exit on close
+        window.setResizable(false); 
         window.add(game);
         window.pack();
-        window.setLocationRelativeTo(null); //centro da tela
-        window.setVisible(true); //deixa a janela visivel
+        window.setLocationRelativeTo(null); 
+        window.setVisible(true); //Deixa a janela visível
 
-        game.start();
+        game.start();   //Start game
     }
 }

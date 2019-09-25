@@ -1,34 +1,53 @@
 package game_2048;
 
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class Keyboard {
 
+    //Classe checa quais teclas foram clicadas
+    
     public static boolean[] pressed = new boolean[256];
-    public static boolean[] prev = new boolean[256];
+    public static boolean[] previous = new boolean[256];
 
     private Keyboard() {
-    } //construtor privado
+    }
 
+    //========================================================================//
+    
     public static void update() {
-        for (int i = 0; i < 4; i++) //here hes only doing with for keys maybe we will have to change,or just put an OR to the if`s
-        {
+        for (int i = 0; i < 8; i++) {   
+            //Setas
             if (i == 0) {
-                prev[KeyEvent.VK_LEFT] = pressed[KeyEvent.VK_LEFT];
+                previous[KeyEvent.VK_LEFT] = pressed[KeyEvent.VK_LEFT];
             }
             if (i == 1) {
-                prev[KeyEvent.VK_RIGHT] = pressed[KeyEvent.VK_RIGHT];
+                previous[KeyEvent.VK_RIGHT] = pressed[KeyEvent.VK_RIGHT];
             }
             if (i == 2) {
-                prev[KeyEvent.VK_UP] = pressed[KeyEvent.VK_UP];
+                previous[KeyEvent.VK_UP] = pressed[KeyEvent.VK_UP];
             }
             if (i == 3) {
-                prev[KeyEvent.VK_DOWN] = pressed[KeyEvent.VK_DOWN];
+                previous[KeyEvent.VK_DOWN] = pressed[KeyEvent.VK_DOWN];
+            }
+            
+            //WASD
+            if (i == 4) {
+                previous[KeyEvent.VK_A] = pressed[KeyEvent.VK_A];
+            }
+            if (i == 5) {
+                previous[KeyEvent.VK_D] = pressed[KeyEvent.VK_D];
+            }
+            if (i == 6) {
+                previous[KeyEvent.VK_W] = pressed[KeyEvent.VK_W];
+            }
+            if (i == 7) {
+                previous[KeyEvent.VK_S] = pressed[KeyEvent.VK_S];
             }
         }
     }
 
-    /*this way allow more than just one key pressed without problems*/
+    //========================================================================//
+    
     public static void keyPressed(KeyEvent e) {
         pressed[e.getKeyCode()] = true;
     }
@@ -38,7 +57,7 @@ public class Keyboard {
     }
 
     public static boolean typed(int keyEvent) {
-        return !pressed[keyEvent] && prev[keyEvent];
+        return !pressed[keyEvent] && previous[keyEvent];
     }
 
 }
