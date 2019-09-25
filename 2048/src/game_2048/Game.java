@@ -23,9 +23,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
 
     private Gameboard board;
 
-    private long startTime;
-    private long elapsed;
-    private boolean set;
 
     //========================================================================//
    

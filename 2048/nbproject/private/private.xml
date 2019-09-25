@@ -3,14 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Micro/Desktop/2048-1.1.0/2048/src/game_2048/Start.java</file>
-            <file>file:/C:/Users/Micro/Desktop/2048-1.1.0/2048/src/game_2048/Tile.java</file>
-            <file>file:/C:/Users/Micro/Desktop/2048-1.1.0/2048/src/game_2048/Gameboard.java</file>
-            <file>file:/C:/Users/Micro/Desktop/2048-1.1.0/2048/src/game_2048/Keyboard.java</file>
-            <file>file:/C:/Users/Micro/Desktop/2048-1.1.0/2048/src/game_2048/Direction.java</file>
-            <file>file:/C:/Users/Micro/Desktop/2048-1.1.0/2048/src/game_2048/Point.java</file>
-            <file>file:/C:/Users/Micro/Desktop/2048-1.1.0/2048/src/game_2048/Game.java</file>
-            <file>file:/C:/Users/Micro/Desktop/2048-1.1.0/2048/src/game_2048/DrawUtils.java</file>
+            <file>file:/C:/Users/cesar/Desktop/2048/src/game_2048/Gameboard.java</file>
+            <file>file:/C:/Users/cesar/Desktop/2048/src/game_2048/Tile.java</file>
         </group>
     </open-files>
 </project-private>
