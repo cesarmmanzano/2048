@@ -189,7 +189,7 @@ public class Gameboard {
         g.setFont(scoreFont);
         g.drawString("" + score, 30, 40);   //g.drawString(score, vertical, horizontal);
         g.setColor(Color.red);
-        g.drawString("Best: " + highScore, Game.WIDTH - DrawUtils.getMessageWidth("Best: " + highScore, scoreFont, g) -357, 70);
+        g.drawString("Best: " + highScore, Game.WIDTH - DrawUtils.getMessageWidth("Best: " + highScore, scoreFont, g) - 370, 80);
     }
 
     //========================================================================//
@@ -393,6 +393,11 @@ public class Gameboard {
             }
         }
         dead = true;
+        
+        if (score >= highScore) {
+            highScore = score;
+        }
+        
         setHighScore();
     }
 
