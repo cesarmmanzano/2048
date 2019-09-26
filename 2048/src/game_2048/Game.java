@@ -13,7 +13,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
     //Inicia variáveis de altura, largura e fonte
     public static final int WIDTH = 500;
     public static final int HEIGHT = 560;
-    public static final Font main = new Font("Bebas Nue Regular", Font.PLAIN, 28);
+    public static final Font main = new Font("Algerian", Font.PLAIN, 28);
 
     private Thread game;
     private boolean running; //Checa se o jogo está rodando
@@ -152,5 +152,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
     public void keyReleased(KeyEvent e) {
         Keyboard.keyReleased(e);
     }
-
+    
+    //========================================================================//
 }

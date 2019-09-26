@@ -11,9 +11,7 @@ public class DrawUtils {
     }
 
     //Centralizar fonte
-    
     //========================================================================//
-
     public static int getMessageWidth(String message, Font font, Graphics2D g) {
         g.setFont(font);
         Rectangle2D bounds = g.getFontMetrics().getStringBounds(message, g);
@@ -21,7 +19,6 @@ public class DrawUtils {
     }
 
     //========================================================================//
-    
     public static int getMessageHeight(String message, Font font, Graphics2D g) {
         g.setFont(font);
         if (message.length() == 0) {
@@ -30,4 +27,6 @@ public class DrawUtils {
         TextLayout text = new TextLayout(message, font, g.getFontRenderContext());
         return (int) text.getBounds().getHeight(); //Retorna altura
     }
+
+    //========================================================================//
 }

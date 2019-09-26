@@ -10,6 +10,7 @@ public class Start extends JPanel {
         Game game = new Game();
 
         //Cria janela do JFrame
+        try{
         JFrame window = new JFrame("2048");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //Exit on close
         window.setResizable(false); 
@@ -17,6 +18,9 @@ public class Start extends JPanel {
         window.pack();
         window.setLocationRelativeTo(null); 
         window.setVisible(true); //Deixa a janela visível
+        }catch(Exception e){
+            System.out.println("Erro na abertura do JFrame");
+        }
 
         game.start();   //Start game
     }
