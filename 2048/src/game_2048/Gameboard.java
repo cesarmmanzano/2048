@@ -1,9 +1,9 @@
 package game_2048;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.Random;
 
 public class Gameboard {
@@ -12,7 +12,7 @@ public class Gameboard {
     public static final int ROWS = 4;
     public static final int COLS = 4;
 
-    private int startingTile; //Numero de blocos iniciais 
+    private int startingTile = 2; //Numero de blocos iniciais 
     private Tile[][] board;
 
     private boolean dead; //Verifica derrota      
@@ -28,6 +28,13 @@ public class Gameboard {
     private int x;
     private int y;
 
+    //Controla score do jogo
+    private int score = 0;
+    private int highScore = 0;
+    private Font scoreFont;
+    private String saveDataPath;
+    private String fileName = "SaveData";
+
     private static int SPACING = 10; //Espaço entre as peças do jogo
 
     //Pega altura e largura em pixel do board
@@ -38,6 +45,14 @@ public class Gameboard {
 
     //========================================================================//
     public Gameboard(int x, int y) {
+        try {
+            saveDataPath = Gameboard.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        scoreFont = Game.main.deriveFont(24f);
+
         this.x = x;
         this.y = y;
 
@@ -46,8 +61,57 @@ public class Gameboard {
         gameBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
         finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
+        loadHighScore();
         createBoardImage();
         start();
+    }
+
+    //========================================================================//
+    private void createSaveData() {
+
+        try {
+            File file = new File(saveDataPath, fileName);
+
+            FileWriter output = new FileWriter(file);
+            BufferedWriter writer = new BufferedWriter(output);
+            writer.write("" + 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    //========================================================================//
+    private void loadHighScore() {
+        try {
+            File file = new File(saveDataPath, fileName);
+            if (!file.isFile()) {
+                createSaveData();
+            }
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            highScore = Integer.parseInt(reader.readLine());
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //========================================================================//
+    private void setHighScore() {
+        FileWriter output = null;
+
+        try {
+            File file = new File(saveDataPath, fileName);
+            output = new FileWriter(file);
+            BufferedWriter writer = new BufferedWriter(output);
+
+            writer.write("" + highScore);
+
+            writer.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //========================================================================//
@@ -73,19 +137,8 @@ public class Gameboard {
     }
 
     //========================================================================//
-    //Para spawnar 1 ou 2 blocos iniciais
-    private int RandomStartingTiles() {
-
-        while (startingTile == 0) {
-            Random random = new Random();
-            startingTile = random.nextInt(3);
-        }
-        return startingTile;
-    }
-
-    //========================================================================//
     private void start() {
-        for (int i = 0; i < RandomStartingTiles(); i++) {
+        for (int i = 0; i < startingTile; i++) {
             spawnRandom();
         }
 
@@ -93,13 +146,13 @@ public class Gameboard {
 
     //========================================================================//
     /*
-        Spawn randomico de blocos
-        Checa todas as posições do board e escolhe uma randomicamente
-    */
+     Spawn randomico de blocos
+     Checa todas as posições do board e escolhe uma randomicamente
+     */
     private void spawnRandom() {
         Random random = new Random();
         boolean notvalid = true;
-        
+
         while (notvalid) {
             int location = random.nextInt(ROWS * COLS);
             int row = location / ROWS;
@@ -131,11 +184,21 @@ public class Gameboard {
 
         g.drawImage(finalBoard, x, y, null);
         g2d.dispose();
+
+        g.setColor(Color.lightGray);
+        g.setFont(scoreFont);
+        g.drawString("" + score, 30, 40);   //g.drawString(score, vertical, horizontal);
+        g.setColor(Color.red);
+        g.drawString("Best: " + highScore, Game.WIDTH - DrawUtils.getMessageWidth("Best: " + highScore, scoreFont, g) - 370, 80);
     }
 
     //========================================================================//
     public void update() {
         checkKeys();
+
+        if (score >= highScore) {
+            highScore = score;
+        }
 
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
@@ -207,6 +270,7 @@ public class Gameboard {
             if (board[newRow][newCol] == null) { //se esta vazio
                 board[newRow][newCol] = current;
                 board[newRow - verticalDirection][newCol - horizontalDirection] = null;
+
                 board[newRow][newCol].setSlideTo(new Point(newRow, newCol));
                 canMove = true;
             } else if (board[newRow][newCol].getValue() == current.getValue() && board[newRow][newCol].iscanCombine()) { //se da pra combinar
@@ -215,8 +279,8 @@ public class Gameboard {
                 canMove = true;
                 board[newRow - verticalDirection][newCol - horizontalDirection] = null;
                 board[newRow][newCol].setSlideTo(new Point(newRow, newCol));
-                board[newRow][newCol].setCombineAnimation(true);    
-                //add to score
+                board[newRow][newCol].setCombineAnimation(true);
+                score = score + board[newRow][newCol].getValue();
             } else {
                 move = false;
             }
@@ -329,6 +393,12 @@ public class Gameboard {
             }
         }
         dead = true;
+        
+        if (score >= highScore) {
+            highScore = score;
+        }
+        
+        setHighScore();
     }
 
     //========================================================================//

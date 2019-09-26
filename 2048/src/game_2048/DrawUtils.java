@@ -14,7 +14,7 @@ public class DrawUtils {
     
     //========================================================================//
 
-    public static int getMenssageWidth(String message, Font font, Graphics2D g) {
+    public static int getMessageWidth(String message, Font font, Graphics2D g) {
         g.setFont(font);
         Rectangle2D bounds = g.getFontMetrics().getStringBounds(message, g);
         return (int) bounds.getWidth(); //Retorna largura 
