@@ -12,6 +12,7 @@ public class GUIMainMenuPanel extends GUIPanel {
     public String title = "MENU 2048";
     private int buttonWidth = 200;
     private int buttonHeight = 60;
+    private Game game;
 
     public GUIMainMenuPanel() {
         super();
@@ -35,7 +36,7 @@ public class GUIMainMenuPanel extends GUIPanel {
         gitButton.setText("GitHub");
         add(gitButton);
 
-        /*
+        
          GUIButton quitButton = new GUIButton(Game.WIDTH / 2 - buttonWidth / 2, 400, buttonWidth, buttonHeight);
          quitButton.addActionListener(new ActionListener() {
          @Override
@@ -45,7 +46,7 @@ public class GUIMainMenuPanel extends GUIPanel {
          });
          quitButton.setText("Sair");
          add(quitButton);
-         */
+         
     }
 
     @Override

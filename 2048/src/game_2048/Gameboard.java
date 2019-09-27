@@ -90,7 +90,11 @@ public class Gameboard extends HighScore {
 
     //========================================================================//
     public void render(Graphics2D g) {
+
+        BufferedImage finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) finalBoard.getGraphics();
+        g2d.setColor(new Color(0, 0, 0, 0));
+        g2d.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
         g2d.drawImage(gameBoard, 0, 0, null);
 
         for (int row = 0; row < ROWS; row++) {
@@ -336,23 +340,24 @@ public class Gameboard extends HighScore {
      Percorre todas as peças checando a combinação nos arredores
      Se não houver cobinação possível -> end game
      */
-    private void checkDead() {
+    public boolean checkDead() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 if (board[row][col] == null) {
-                    return;
+                    return false;
                 }
                 if (checkSurroundingTiles(row, col, board[row][col])) {
-                    return;
+                    return false;
                 }
             }
         }
-        dead = true;
 
         if (currentScore >= highScore) {
             highScore = currentScore;
         }
         setHighScore();
+
+        return true;
     }
 
     //========================================================================//

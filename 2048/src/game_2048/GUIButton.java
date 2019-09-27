@@ -17,7 +17,7 @@ public class GUIButton {
 
     private Color released;
     private Color hover;
-    
+    private Color pressed;
     private Font font = Game.main.deriveFont(22f);
 
     //========================================================================//
@@ -33,7 +33,7 @@ public class GUIButton {
 
         released = new Color(0xff0000);
         hover = new Color(0x008000);
-        
+        pressed = new Color(0xff0000);
     }
 
     //========================================================================//
@@ -44,6 +44,9 @@ public class GUIButton {
     public void render(Graphics2D g) {
         if (currentState == State.RELEASED) {
             g.setColor(released);
+            g.fill(clickBox);
+        } else if (currentState == State.PRESSED) {
+            g.setColor(pressed);
             g.fill(clickBox);
         } else {
             g.setColor(hover);
