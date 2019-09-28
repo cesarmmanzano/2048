@@ -1,31 +1,42 @@
 package game_2048;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
-import java.awt.image.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
+//========================================================================//
 public class Tile {
 
-    //Informações do Bloco (Tile)
-    public static final int WIDTH = 100;
-    public static final int HEIGHT = 100;
-    public static final int SLIDE_SPEED = 30;
+    //Informações da peça
+    public static final int WIDTH = 100; //Largura
+    public static final int HEIGHT = 100; //Altura
+    public static final int TILE_SPEED = 35; //Velocidade da peça
 
-    //Para os blocos "arredondados"
-    public static final int ARC_WIDTH = 15;
-    public static final int ARC_HEIGHT = 15;
+    //Valor da peça -> 2, 4, 8 ...
+    private int tileValue;
 
-    //Variáveis específica da classe Tile
-    private int value;
+    //Usada para desenhar a peça
     private BufferedImage tileImage;
-    private Color background;
-    private Color text;
-    private Font font;
+
+    //Cores
+    private Color tileBackground;
+    private Color tileText;
+
+    //Fontes
+    private Font tileFont;
     private Point slideTo;
+
     //Posiçoes na tela
     private int x;
     private int y;
 
+    //Para animações
     private boolean beginningAnimation = true;
     private double scaleFirst = 0.1;
     private BufferedImage beginningImage;
@@ -33,11 +44,12 @@ public class Tile {
     private double scaleCombine = 1.3;
     private BufferedImage combineImage;
 
+    //Para checar a combinação das peças
     private boolean canCombine = true;
 
-    //========================================================================//
+    //====================TILE CONSTRUCTOR====================================//
     public Tile(int value, int x, int y) {
-        this.value = value;
+        this.tileValue = value;
         this.x = x;
         this.y = y;
         slideTo = new Point(x, y);
@@ -48,73 +60,10 @@ public class Tile {
         beginningImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
         combineImage = new BufferedImage(WIDTH * 2, HEIGHT * 2, BufferedImage.TYPE_INT_ARGB);
 
-        drawImage(); //Desenha número desejado
+        drawTile(); //Desenha número desejado
     }
 
-    //========================================================================//
-    //Desenha as peças 
-    private void drawImage() {
-        Graphics2D g = (Graphics2D) tileImage.getGraphics();
-        if (value == 2) {
-            background = new Color(0xEEE4DA);   //Cor do bloco  
-            text = new Color(0x000000);         //Cor do numero do bloco (2, 4, 8, 16, ...)  
-        } else if (value == 4) {
-            background = new Color(0xEDE0C8);
-            text = new Color(0x000000);
-        } else if (value == 8) {
-            background = new Color(0xF2B179);
-            text = new Color(0xFFFFFF);
-        } else if (value == 16) {
-            background = new Color(0xF59563);
-            text = new Color(0xFFFFFF);
-        } else if (value == 32) {
-            background = new Color(0xF67C5F);
-            text = new Color(0xFFFFFF);
-        } else if (value == 64) {
-            background = new Color(0xF65E3B);
-            text = new Color(0xFFFFFF);
-        } else if (value == 128) {
-            background = new Color(0xEDCF72);
-            text = new Color(0xFFFFFF);
-        } else if (value == 256) {
-            background = new Color(0xEDCC61);
-            text = new Color(0xFFFFFF);
-        } else if (value == 512) {
-            background = new Color(0xEDC850);
-            text = new Color(0xFFFFFF);
-        } else if (value == 1024) {
-            background = new Color(0xEDC53F);
-            text = new Color(0xFFFFFF);
-        } else if (value == 2048) {
-            background = new Color(0xEDC22E);
-            text = new Color(0xFFFFFF);
-        }
-
-        //Desenha informações do bloco
-        g.setColor(new Color(0, 0, 0, 0));
-        g.fillRect(0, 0, WIDTH, HEIGHT);
-
-        g.setColor(background);
-        g.fillRoundRect(0, 0, WIDTH, HEIGHT, ARC_WIDTH, ARC_HEIGHT);
-        g.setColor(text);
-
-        //Fontes dos blocos
-        if (value <= 64) {
-            font = Game.main.deriveFont(36f);
-        } else {
-            font = Game.main;
-        }
-        g.setFont(font);
-
-        //Centralizando texto
-        int drawX = WIDTH / 2 - DrawUtils.getMessageWidth("" + value, font, g) / 2;
-        int drawY = HEIGHT / 2 + DrawUtils.getMessageHeight("" + value, font, g) / 2;
-        g.drawString("" + value, drawX, drawY);
-        g.dispose();
-
-    }
-
-    //========================================================================//
+    //===========================UPDATE=======================================//
     public void update() {
         if (beginningAnimation) {
             AffineTransform transform = new AffineTransform();
@@ -149,7 +98,7 @@ public class Tile {
         }
     }
 
-    //========================================================================//
+    //==========================RENDER========================================//
     public void render(Graphics2D g) {
         if (beginningAnimation) {
             g.drawImage(beginningImage, x, y, null);
@@ -160,15 +109,87 @@ public class Tile {
         }
     }
 
-    //========================================================================//
-    //Getters e Setters
+    //======================DRAW TILE=========================================//
+    //Desenha as peças 
+    private void drawTile() {
+        Graphics2D g = (Graphics2D) tileImage.getGraphics();
+
+        //Atribuição das cores das peças
+        switch (tileValue) {
+            case 2:
+                tileBackground = new Color(0xEEE4DA);   //Cor da peça
+                tileText = new Color(0x000000);         //Cor do numero da peça
+                break;
+            case 4:
+                tileBackground = new Color(0xEDE0C8);
+                tileText = new Color(0x000000);
+                break;
+            case 8:
+                tileBackground = new Color(0xF2B179);
+                tileText = new Color(0xFFFFFF);
+                break;
+            case 16:
+                tileBackground = new Color(0xF59563);
+                tileText = new Color(0xFFFFFF);
+                break;
+            case 32:
+                tileBackground = new Color(0xF67C5F);
+                tileText = new Color(0xFFFFFF);
+                break;
+            case 64:
+                tileBackground = new Color(0xF65E3B);
+                tileText = new Color(0xFFFFFF);
+                break;
+            case 128:
+                tileBackground = new Color(0xEDCF72);
+                tileText = new Color(0xFFFFFF);
+                break;
+            case 256:
+                tileBackground = new Color(0xEDCC61);
+                tileText = new Color(0xFFFFFF);
+                break;
+            case 512:
+                tileBackground = new Color(0xEDC850);
+                tileText = new Color(0xFFFFFF);
+                break;
+            case 1024:
+                tileBackground = new Color(0xEDC53F);
+                tileText = new Color(0xFFFFFF);
+                break;
+            case 2048:
+                tileBackground = new Color(0xEDC22E);
+                tileText = new Color(0xFFFFFF);
+                break;
+
+        }
+
+        //Desenha informações do bloco
+        g.setColor(new Color(0, 0, 0, 0));
+        g.fillRect(0, 0, WIDTH, HEIGHT);
+        g.setColor(tileBackground);
+        g.fillRoundRect(0, 0, WIDTH, HEIGHT, 0, 0);
+        g.setColor(tileText);
+
+        //Fontes dos blocos
+        tileFont = Game.main.deriveFont(40f);
+        g.setFont(tileFont);
+
+        //Centralizando texto
+        int drawX = WIDTH / 2 - DrawUtils.getMessageWidth("" + tileValue, tileFont, g) / 2;
+        int drawY = HEIGHT / 2 + DrawUtils.getMessageHeight("" + tileValue, tileFont, g) / 2;
+        g.drawString("" + tileValue, drawX, drawY);
+        g.dispose();
+
+    }
+
+    //========================GETTERS e SETTERS===============================//
     public int getValue() {
-        return value;
+        return tileValue;
     }
 
     public void setValue(int value) {
-        this.value = value;
-        drawImage();
+        this.tileValue = value;
+        drawTile();
     }
 
     public boolean iscanCombine() {
@@ -209,7 +230,10 @@ public class Tile {
 
     public void setCombineAnimation(boolean combineAnimation) {
         this.combineAnimation = combineAnimation;
-        if(combineAnimation) scaleCombine = 1.3;
+        if (combineAnimation) {
+            scaleCombine = 1.3;
+        }
     }
 
+    //========================================================================//
 }

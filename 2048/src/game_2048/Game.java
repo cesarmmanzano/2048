@@ -1,11 +1,18 @@
 package game_2048;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
-public class Game extends JPanel implements KeyListener, Runnable {
+public class Game extends JPanel implements KeyListener, Runnable, MouseListener, MouseMotionListener {
 
     //implements -> por conta da thread
     private static final long serialVersionUID = 1L;
@@ -13,7 +20,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
     //Inicia variáveis de altura, largura e fonte
     public static final int WIDTH = 500;
     public static final int HEIGHT = 560;
-    public static final Font main = new Font("Bebas Nue Regular", Font.PLAIN, 28);
+    public static final Font main = new Font("Algerian", Font.PLAIN, 28);
 
     private Thread game;
     private boolean running; //Checa se o jogo está rodando
@@ -21,11 +28,10 @@ public class Game extends JPanel implements KeyListener, Runnable {
     //Usado para desenhar no JPanel
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
-    private Gameboard board;
-
+    private Color background;
+    private GUIScreen screen;
 
     //========================================================================//
-   
     public Game() {
         setFocusable(true);
 
@@ -33,24 +39,28 @@ public class Game extends JPanel implements KeyListener, Runnable {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         addKeyListener(this);
+        addMouseListener(this);
+        addMouseMotionListener(this);
 
-        board = new Gameboard(WIDTH / 2 - Gameboard.BOARD_WIDTH / 2, HEIGHT - Gameboard.BOARD_HEIGHT - 10);
+        screen = GUIScreen.getInstance();
+        screen.add("Menu", new GUIMainMenuPanel());
+        screen.add("Jogar", new PlayPanel());
+        screen.setCurrentPanel("Menu");
     }
 
     //========================================================================//
-    
     private void update() {
-        board.update();
+        screen.update();
         Keyboard.update();
     }
 
     //========================================================================//
-    
     private void render() {
         Graphics2D g = (Graphics2D) image.getGraphics();
-        g.setColor(Color.white);
+        background = new Color(0xDCDCDC);
+        g.setColor(background);
         g.fillRect(0, 0, WIDTH, HEIGHT); //"Clear screen" - tela branca no fundo
-        board.render(g);
+        screen.render(g);
 
         g.dispose();
 
@@ -62,7 +72,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
     }
 
     //========================================================================//
-   
     @Override
     public void run() {
         int fps = 0, updates = 0;
@@ -115,7 +124,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
     }
 
     //========================================================================//
-   
     //Start Thread
     public synchronized void start() {
         if (running) {
@@ -137,7 +145,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
     }
 
     //========================================================================//
-
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -153,4 +160,37 @@ public class Game extends JPanel implements KeyListener, Runnable {
         Keyboard.keyReleased(e);
     }
 
+    //========================================================================//
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        screen.mousePressed(e);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        screen.mouseReleased(e);
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        screen.mouseDragged(e);
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        screen.mouseMoved(e);
+
+    }
 }
