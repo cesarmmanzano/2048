@@ -1,26 +1,34 @@
 package game_2048;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
 
+//========================================================================//
 public class Tile {
 
-    //Informações do Bloco (Tile)
-    public static final int WIDTH = 100;
-    public static final int HEIGHT = 100;
-    public static final int TILE_SPEED = 35;
+    //Informações da peça
+    public static final int WIDTH = 100; //Largura
+    public static final int HEIGHT = 100; //Altura
+    public static final int TILE_SPEED = 35; //Velocidade da peça
 
-    //Para os blocos "arredondados"
-    // public static final int ARC_WIDTH = 15;
-    //public static final int ARC_HEIGHT = 15;
-    //Variáveis específica da classe Tile
+    //Valor da peça -> 2, 4, 8 ...
     private int tileValue;
+
+    //Usada para desenhar a peça
     private BufferedImage tileImage;
+
+    //Cores
     private Color tileBackground;
     private Color tileText;
+
+    //Fontes
     private Font tileFont;
     private Point slideTo;
 
@@ -36,9 +44,10 @@ public class Tile {
     private double scaleCombine = 1.3;
     private BufferedImage combineImage;
 
+    //Para checar a combinação das peças
     private boolean canCombine = true;
 
-    //========================================================================//
+    //====================TILE CONSTRUCTOR====================================//
     public Tile(int value, int x, int y) {
         this.tileValue = value;
         this.x = x;
@@ -54,7 +63,7 @@ public class Tile {
         drawTile(); //Desenha número desejado
     }
 
-    //========================================================================//
+    //===========================UPDATE=======================================//
     public void update() {
         if (beginningAnimation) {
             AffineTransform transform = new AffineTransform();
@@ -89,7 +98,7 @@ public class Tile {
         }
     }
 
-    //========================================================================//
+    //==========================RENDER========================================//
     public void render(Graphics2D g) {
         if (beginningAnimation) {
             g.drawImage(beginningImage, x, y, null);
@@ -100,15 +109,16 @@ public class Tile {
         }
     }
 
-    //========================================================================//
+    //======================DRAW TILE=========================================//
     //Desenha as peças 
     private void drawTile() {
         Graphics2D g = (Graphics2D) tileImage.getGraphics();
 
+        //Atribuição das cores das peças
         switch (tileValue) {
             case 2:
-                tileBackground = new Color(0xEEE4DA);   //Cor do bloco  
-                tileText = new Color(0x000000);         //Cor do numero do bloco (2, 4, 8, 16, ...)  
+                tileBackground = new Color(0xEEE4DA);   //Cor da peça
+                tileText = new Color(0x000000);         //Cor do numero da peça
                 break;
             case 4:
                 tileBackground = new Color(0xEDE0C8);
@@ -172,8 +182,7 @@ public class Tile {
 
     }
 
-    //========================================================================//
-    //Getters e Setters
+    //========================GETTERS e SETTERS===============================//
     public int getValue() {
         return tileValue;
     }

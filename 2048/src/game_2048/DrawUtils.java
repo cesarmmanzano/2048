@@ -5,13 +5,16 @@ import java.awt.Graphics2D;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 
+//========================================================================//
 public class DrawUtils {
 
     private DrawUtils() {
     }
 
-    //Centralizar fonte
+    //A classe é usada para centralizar o texto quando necessário
+    
     //========================================================================//
+    //Largura da mensagem
     public static int getMessageWidth(String message, Font font, Graphics2D g) {
         g.setFont(font);
         Rectangle2D bounds = g.getFontMetrics().getStringBounds(message, g);
@@ -19,6 +22,7 @@ public class DrawUtils {
     }
 
     //========================================================================//
+    //Altura da mensagem
     public static int getMessageHeight(String message, Font font, Graphics2D g) {
         g.setFont(font);
         if (message.length() == 0) {

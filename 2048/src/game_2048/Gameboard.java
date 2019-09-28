@@ -1,6 +1,8 @@
 package game_2048;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Random;
@@ -15,31 +17,40 @@ public class Gameboard extends HighScore {
 
     //Board será 4x4
     public static final int ROWS = 4;
-    public static final int COLS = 4;
+    public static final int COLUMNS = 4;
 
-    private int startingTile = 2; //Numero de blocos iniciais 
+    //Numero de blocos iniciais 
+    private int startingTile = 2;
+    
+    //Matriz para o jogo
     private Tile[][] board;
 
-    private boolean dead; //Verifica derrota      
-    private boolean won;  //Verifica vitória  
+    //Verifica derrotae e vitoria
+    private boolean loseGame;
+    private boolean winGame;
 
-    private BufferedImage gameBoard; //Background gameBoard
-    private BufferedImage finalBoard;
+    //Para criar Gameboard
+    private BufferedImage gameBoard;
+    
+    //private BufferedImage finalBoard;
 
-    private Color backgroundBoard;  //Cor do backgrond
-    private Color backgroundRect;  //Cor dos retangulos
+    //Cores de fundo do board e do bloco
+    private Color backgroundBoard = new Color(0x776E65);
+    private Color backgroundRect = new Color(0xD8BFD8);
 
     //Posição para desenhar na tela
     private int x;
     private int y;
 
-    private static int SPACING = 10; //Espaço entre as peças do jogo
+    //Espaçamento entre as peças
+    private static int SPACING = 10;
 
-    //Pega altura e largura em pixel do board
-    public static int BOARD_WIDTH = (COLS + 1) * SPACING + COLS * Tile.WIDTH;
+    //Altura e largura em pixel do board
+    public static int BOARD_WIDTH = (COLUMNS + 1) * SPACING + COLUMNS * Tile.WIDTH;
     public static int BOARD_HEIGHT = (ROWS + 1) * SPACING + ROWS * Tile.HEIGHT;
 
-    private boolean hasStarted;
+    //Verifica se o jogo iniciou
+    private boolean gameStarted;
 
     //========================================================================//
     public Gameboard(int x, int y) {
@@ -54,10 +65,10 @@ public class Gameboard extends HighScore {
         this.x = x;
         this.y = y;
 
-        board = new Tile[ROWS][COLS];   //Board 4x4
+        board = new Tile[ROWS][COLUMNS];   //Board 4x4
 
         gameBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        //finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
         loadHighScore();
         createBoardImage();
@@ -73,7 +84,7 @@ public class Gameboard extends HighScore {
         }
 
         for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
+            for (int col = 0; col < COLUMNS; col++) {
                 Tile current = board[row][col];
                 if (current == null) {
                     continue;
@@ -82,7 +93,7 @@ public class Gameboard extends HighScore {
                 //reset the position
                 resetPosition(current, row, col);
                 if (current.getValue() == 2048) {
-                    won = true;
+                    winGame = true;
                 }
             }
         }
@@ -98,7 +109,7 @@ public class Gameboard extends HighScore {
         g2d.drawImage(gameBoard, 0, 0, null);
 
         for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
+            for (int col = 0; col < COLUMNS; col++) {
                 Tile currently = board[row][col];
                 if (currently == null) {
                     continue;
@@ -110,27 +121,37 @@ public class Gameboard extends HighScore {
         g.drawImage(finalBoard, x, y, null);
         g2d.dispose();
 
-        g.setColor(Color.lightGray);
+        g.setColor(scoreColor);
         g.setFont(scoreFont);
         g.drawString("Score: " + currentScore, 30, 40);   //g.drawString(score, vertical, horizontal);
-        g.setColor(Color.red);
+        g.setColor(bestColor);
         g.drawString("Best: " + highScore, Game.WIDTH - DrawUtils.getMessageWidth("", scoreFont, g) - 470, 80);
+    }
+
+    //==============================RESET=====================================//
+    //Reseta informações quando o usuário selecionar jogar novamente
+    public void reset() {
+        board = new Tile[ROWS][COLUMNS];
+        start();
+        loseGame = false;
+        winGame = false;
+        gameStarted = false;
+        currentScore = 0;
     }
 
     //========================================================================//
     //Cria background do Board
     private void createBoardImage() {
         Graphics2D g = (Graphics2D) gameBoard.getGraphics();
-        backgroundBoard = new Color(0x776E65); //Cor de fundo do Board
-        g.setColor(backgroundBoard);
 
+        //Cor de fundo do Board
+        g.setColor(backgroundBoard);
         g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 
-        backgroundRect = new Color(0xD8BFD8); //Cor de fundo do retangulo
+        //Cor de fundo de cada bloco 
         g.setColor(backgroundRect);
-
         for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
+            for (int col = 0; col < COLUMNS; col++) {
                 int x = SPACING + SPACING * col + Tile.WIDTH * col;
                 int y = SPACING + SPACING * row + Tile.HEIGHT * row;
                 g.fillRoundRect(x, y, Tile.WIDTH, Tile.HEIGHT, 0, 0);
@@ -142,25 +163,22 @@ public class Gameboard extends HighScore {
     //========================================================================//
     private void start() {
         for (int i = 0; i < startingTile; i++) {
-            spawnRandom();
+            spawnRandomTile();
         }
 
     }
 
-    //========================================================================//
-    /*
-     Spawn randomico de blocos
-     Checa todas as posições do board e escolhe uma randomicamente
-     */
-    private void spawnRandom() {
+    //=======================SPAWN TILE=======================================//
+    //Spawn randomico de tiles
+    private void spawnRandomTile() {
         Random random = new Random();
-        int location = random.nextInt(ROWS * COLS);
+        int location = random.nextInt(ROWS * COLUMNS);
         int row = 0, col = 0;
 
         do {
-            location = (location + 1) % (ROWS * COLS);
+            location = (location + 1) % (ROWS * COLUMNS);
             row = location / ROWS;
-            col = location % COLS;
+            col = location % COLUMNS;
         } while (board[row][col] != null);
 
         //80% de chance de spawnar 2 / 20% de chance de spawnar 4
@@ -254,7 +272,7 @@ public class Gameboard extends HighScore {
         if (dir == Direction.LEFT) {
             return col < 0;
         } else if (dir == Direction.RIGHT) {
-            return col > COLS - 1;
+            return col > COLUMNS - 1;
         } else if (dir == Direction.UP) {
             return row < 0;
         } else if (dir == Direction.DOWN) {
@@ -273,7 +291,7 @@ public class Gameboard extends HighScore {
         if (dir == Direction.LEFT) {
             horizontalDirection = -1;
             for (int row = 0; row < ROWS; row++) {
-                for (int col = 0; col < COLS; col++) {
+                for (int col = 0; col < COLUMNS; col++) {
                     if (!canMove) {
                         canMove = move(row, col, horizontalDirection, verticalDirection, dir);
                     } else {
@@ -284,7 +302,7 @@ public class Gameboard extends HighScore {
         } else if (dir == Direction.RIGHT) {
             horizontalDirection = +1;
             for (int row = 0; row < ROWS; row++) {
-                for (int col = COLS - 1; col >= 0; col--) {
+                for (int col = COLUMNS - 1; col >= 0; col--) {
                     if (!canMove) {
                         canMove = move(row, col, horizontalDirection, verticalDirection, dir);
                     } else {
@@ -295,7 +313,7 @@ public class Gameboard extends HighScore {
         } else if (dir == Direction.UP) {
             verticalDirection = -1;
             for (int row = 0; row < ROWS; row++) {
-                for (int col = 0; col < COLS; col++) {
+                for (int col = 0; col < COLUMNS; col++) {
                     if (!canMove) {
                         canMove = move(row, col, horizontalDirection, verticalDirection, dir);
                     } else {
@@ -306,7 +324,7 @@ public class Gameboard extends HighScore {
         } else if (dir == Direction.DOWN) {
             verticalDirection = 1;
             for (int row = ROWS - 1; row >= 0; row--) {
-                for (int col = 0; col < COLS; col++) {
+                for (int col = 0; col < COLUMNS; col++) {
                     if (!canMove) {
                         canMove = move(row, col, horizontalDirection, verticalDirection, dir);
                     } else {
@@ -319,7 +337,7 @@ public class Gameboard extends HighScore {
         }
 
         for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
+            for (int col = 0; col < COLUMNS; col++) {
                 Tile current = board[row][col];
                 if (current == null) {
                     continue;
@@ -328,7 +346,7 @@ public class Gameboard extends HighScore {
             }
         }
         if (canMove) {
-            spawnRandom();
+            spawnRandomTile();
             checkDead();
         }
 
@@ -342,7 +360,7 @@ public class Gameboard extends HighScore {
      */
     public boolean checkDead() {
         for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
+            for (int col = 0; col < COLUMNS; col++) {
                 if (board[row][col] == null) {
                     return false;
                 }
@@ -390,7 +408,7 @@ public class Gameboard extends HighScore {
                 return true;
             }
         }
-        if (col < COLS - 1) {
+        if (col < COLUMNS - 1) {
             Tile check = board[row][col + 1];
             if (check == null) {
                 return true;
@@ -408,62 +426,61 @@ public class Gameboard extends HighScore {
         //LEFT
         if (Keyboard.typed(KeyEvent.VK_LEFT)) {
             moveTiles(Direction.LEFT);
-            if (!hasStarted) {
-                hasStarted = true;
+            if (!gameStarted) {
+                gameStarted = true;
             }
         }
         if (Keyboard.typed(KeyEvent.VK_A)) {
             moveTiles(Direction.LEFT);
-            if (!hasStarted) {
-                hasStarted = true;
+            if (!gameStarted) {
+                gameStarted = true;
             }
         }
 
         //RIGHT
         if (Keyboard.typed(KeyEvent.VK_RIGHT)) {
             moveTiles(Direction.RIGHT);
-            if (!hasStarted) {
-                hasStarted = true;
+            if (!gameStarted) {
+                gameStarted = true;
             }
         }
         if (Keyboard.typed(KeyEvent.VK_D)) {
             moveTiles(Direction.RIGHT);
-            if (!hasStarted) {
-                hasStarted = true;
+            if (!gameStarted) {
+                gameStarted = true;
             }
         }
 
         //UP
         if (Keyboard.typed(KeyEvent.VK_UP)) {
             moveTiles(Direction.UP);
-            if (!hasStarted) {
-                hasStarted = true;
+            if (!gameStarted) {
+                gameStarted = true;
             }
         }
         if (Keyboard.typed(KeyEvent.VK_W)) {
             moveTiles(Direction.UP);
-            if (!hasStarted) {
-                hasStarted = true;
+            if (!gameStarted) {
+                gameStarted = true;
             }
         }
 
         //DOWN
         if (Keyboard.typed(KeyEvent.VK_DOWN)) {
             moveTiles(Direction.DOWN);
-            if (!hasStarted) {
-                hasStarted = true;
+            if (!gameStarted) {
+                gameStarted = true;
             }
         }
         if (Keyboard.typed(KeyEvent.VK_S)) {
             moveTiles(Direction.DOWN);
-            if (!hasStarted) {
-                hasStarted = true;
+            if (!gameStarted) {
+                gameStarted = true;
             }
         }
     }
 
-    //========================================================================//
-    //Getters e Setters
+    //========================GETTERS e SETTERS===============================//
     public int getTileX(int col) {
         return SPACING + col * Tile.WIDTH + col * SPACING;
     }

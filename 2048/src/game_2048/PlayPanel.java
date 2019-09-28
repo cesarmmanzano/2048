@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 import javax.imageio.ImageIO;
 
@@ -29,10 +28,8 @@ public class PlayPanel extends GUIPanel {
     private Font gameOverFont;
 
     public PlayPanel() {
-        //scoreFont = Game.main.deriveFont(24f);
         gameOverFont = Game.main.deriveFont(70f);
         board = new Gameboard(Game.WIDTH / 2 - Gameboard.BOARD_WIDTH / 2, Game.HEIGHT - Gameboard.BOARD_HEIGHT - 20);
-        //scores = board.getScores();
         info = new BufferedImage(Game.WIDTH, 200, BufferedImage.TYPE_INT_RGB);
 
         mainMenu = new GUIButton(Game.WIDTH / 2 - largeButtonWidth / 2, 450, largeButtonWidth, buttonHeight);
@@ -42,9 +39,9 @@ public class PlayPanel extends GUIPanel {
         mainMenu.setText("Voltar para o Menu");
 
         tryAgain.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                //board.getScores().reset();
-                //board.reset();
+                board.reset();
                 alpha = 0;
 
                 remove(tryAgain);
@@ -55,8 +52,12 @@ public class PlayPanel extends GUIPanel {
         });
 
         mainMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 GUIScreen.getInstance().setCurrentPanel("Menu");
+
+                remove(tryAgain);
+                remove(mainMenu);
             }
         });
     }
@@ -80,12 +81,11 @@ public class PlayPanel extends GUIPanel {
      g.drawImage(info, 0, 0, null);
      }
      */
-    
     public void drawGameOver(Graphics2D g) {
         g.setColor(new Color(222, 222, 222, alpha));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
         g.setColor(Color.red);
-        g.drawString("Game Over!", Game.WIDTH / 2 - DrawUtils.getMessageWidth("Game Over!", gameOverFont, g) / 2, 250);
+        g.drawString("FIM DE JOGO", Game.WIDTH / 2 - DrawUtils.getMessageWidth("FIM DE JOGO!", gameOverFont, g) / 2, 250);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class PlayPanel extends GUIPanel {
     public void render(Graphics2D g) {
         //drawGui(g);
         board.render(g);
-        
+
         if (board.checkDead()) {
             if (!added) {
                 added = true;

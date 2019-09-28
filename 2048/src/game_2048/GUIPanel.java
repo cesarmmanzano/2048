@@ -33,7 +33,7 @@ public class GUIPanel {
     }
 
     public void remove(GUIButton button) {
-        buttons.remove(buttons);
+        buttons.remove(button);
     }
 
     //========================================================================//

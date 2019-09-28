@@ -15,9 +15,9 @@ public class GUIButton {
     private ArrayList<ActionListener> actionListeners;
     private String text = "";
 
-    private Color released;
-    private Color hover;
-    private Color pressed;
+    private Color released = new Color(0x00008B);
+    private Color hover = new Color(0x008000);
+    private Color pressed = new Color(0x008000);
     private Font font = Game.main.deriveFont(22f);
 
     //========================================================================//
@@ -31,9 +31,6 @@ public class GUIButton {
         clickBox = new Rectangle(x, y, width, height);
         actionListeners = new ArrayList<ActionListener>();
 
-        released = new Color(0xff0000);
-        hover = new Color(0x008000);
-        pressed = new Color(0xff0000);
     }
 
     //========================================================================//
@@ -113,6 +110,6 @@ public class GUIButton {
     }
 
     public void setText(String text) {
-        this.text = text;   
+        this.text = text;
     }
 }

@@ -1,8 +1,15 @@
 package game_2048;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 public class Game extends JPanel implements KeyListener, Runnable, MouseListener, MouseMotionListener {
@@ -21,11 +28,10 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     //Usado para desenhar no JPanel
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
+    private Color background;
     private GUIScreen screen;
 
-
     //========================================================================//
-   
     public Game() {
         setFocusable(true);
 
@@ -43,17 +49,16 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     }
 
     //========================================================================//
-    
     private void update() {
         screen.update();
         Keyboard.update();
     }
 
     //========================================================================//
-    
     private void render() {
         Graphics2D g = (Graphics2D) image.getGraphics();
-        g.setColor(Color.white);
+        background = new Color(0xDCDCDC);
+        g.setColor(background);
         g.fillRect(0, 0, WIDTH, HEIGHT); //"Clear screen" - tela branca no fundo
         screen.render(g);
 
@@ -67,7 +72,6 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     }
 
     //========================================================================//
-   
     @Override
     public void run() {
         int fps = 0, updates = 0;
@@ -120,7 +124,6 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     }
 
     //========================================================================//
-   
     //Start Thread
     public synchronized void start() {
         if (running) {
@@ -142,7 +145,6 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     }
 
     //========================================================================//
-
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -157,9 +159,8 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     public void keyReleased(KeyEvent e) {
         Keyboard.keyReleased(e);
     }
-    
-    //========================================================================//
 
+    //========================================================================//
     @Override
     public void mouseClicked(MouseEvent e) {
     }
@@ -190,6 +191,6 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     @Override
     public void mouseMoved(MouseEvent e) {
         screen.mouseMoved(e);
-       
+
     }
 }

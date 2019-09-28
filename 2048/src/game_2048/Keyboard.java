@@ -1,6 +1,7 @@
 package game_2048;
 
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+
 
 public class Keyboard {
 
