@@ -54,33 +54,14 @@ public class PlayPanel extends GUIPanel {
         mainMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GUIScreen.getInstance().setCurrentPanel("Menu");
-
+                board.reset();
                 remove(tryAgain);
                 remove(mainMenu);
+                GUIScreen.getInstance().setCurrentPanel("Menu");
             }
         });
     }
-
-    /*
-     private void drawGui(Graphics2D g) {
-
-     // Draw it
-     Graphics2D g2d = (Graphics2D) info.getGraphics();
-     g2d.setColor(Color.white);
-     g2d.fillRect(0, 0, info.getWidth(), info.getHeight());
-     g2d.setColor(Color.lightGray);
-     g2d.setFont(scoreFont);
-     g2d.drawString("" + scores.getCurrentScore(), 30, 40);
-     g2d.setColor(Color.red);
-     g2d.drawString("Best: " + scores.getCurrentTopScore(), Game.WIDTH - DrawUtils.getMessageWidth("Best: " + scores.getCurrentTopScore(), scoreFont, g2d) - 20, 40);
-     g2d.drawString("Fastest: " + bestTimeF, Game.WIDTH - DrawUtils.getMessageWidth("Fastest: " + bestTimeF, scoreFont, g2d) - 20, 90);
-     g2d.setColor(Color.black);
-     g2d.drawString("Time: " + timeF, 30, 90);
-     g2d.dispose();
-     g.drawImage(info, 0, 0, null);
-     }
-     */
+    
     public void drawGameOver(Graphics2D g) {
         g.setColor(new Color(222, 222, 222, alpha));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);

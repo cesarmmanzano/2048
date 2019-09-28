@@ -9,24 +9,30 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
-
-
 public class HighScore {
 
     //Controla score do jogo
     public int currentScore;
     public int highScore;
-    public String saveFile;
-    public Font scoreFont;
-    public String fileName = "SaveHighScore";
+
+    //Cores do score
     public Color scoreColor = new Color(0xA020F0);
     public Color bestColor = new Color(0x191970);
+
+    //Fonte do score
+    public Font scoreFont;
+
+    
+    public String saveFile;
+
+    //Nome do arquivo
+    public String fileName = "SaveHighScore";
 
     public HighScore() {
     }
 
     //========================================================================//
-    public void createHighScore() {
+    public void createScore() {
         try {
             File file = new File(saveFile, fileName);
 
@@ -40,11 +46,11 @@ public class HighScore {
     }
 
     //========================================================================//
-    public void loadHighScore() {
+    public void loadScore() {
         try {
             File file = new File(saveFile, fileName);
             if (!file.isFile()) {
-                createHighScore();
+                createScore();
             }
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             highScore = Integer.parseInt(reader.readLine());
@@ -55,9 +61,8 @@ public class HighScore {
     }
 
     //========================================================================//
-    public void setHighScore() {
+    public void setScore() {
         FileWriter output = null;
-
         try {
             File file = new File(saveFile, fileName);
             output = new FileWriter(file);
@@ -71,6 +76,4 @@ public class HighScore {
             e.printStackTrace();
         }
     }
-
-    //========================================================================//
 }

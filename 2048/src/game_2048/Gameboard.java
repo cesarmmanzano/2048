@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 import javax.swing.*;
 
+//========================================================================//
 public class Gameboard extends HighScore {
 
     public enum Direction {
@@ -21,7 +22,7 @@ public class Gameboard extends HighScore {
 
     //Numero de blocos iniciais 
     private int startingTile = 2;
-    
+
     //Matriz para o jogo
     private Tile[][] board;
 
@@ -31,9 +32,8 @@ public class Gameboard extends HighScore {
 
     //Para criar Gameboard
     private BufferedImage gameBoard;
-    
-    //private BufferedImage finalBoard;
 
+    //private BufferedImage finalBoard;
     //Cores de fundo do board e do bloco
     private Color backgroundBoard = new Color(0x776E65);
     private Color backgroundRect = new Color(0xD8BFD8);
@@ -70,7 +70,7 @@ public class Gameboard extends HighScore {
         gameBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
         //finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
-        loadHighScore();
+        loadScore();
         createBoardImage();
         start();
     }
@@ -373,7 +373,7 @@ public class Gameboard extends HighScore {
         if (currentScore >= highScore) {
             highScore = currentScore;
         }
-        setHighScore();
+        setScore();
 
         return true;
     }
@@ -488,6 +488,4 @@ public class Gameboard extends HighScore {
     public int getTileY(int row) {
         return SPACING + row * Tile.HEIGHT + row * SPACING;
     }
-
-    //========================================================================//
 }

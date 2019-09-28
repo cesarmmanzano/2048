@@ -2,7 +2,6 @@ package game_2048;
 
 import java.awt.event.KeyEvent;
 
-
 public class Keyboard {
 
     //Classe checa quais teclas foram clicadas
@@ -61,6 +60,4 @@ public class Keyboard {
     public static boolean typed(int keyEvent) {
         return !pressed[keyEvent] && previous[keyEvent];
     }
-
-    //========================================================================//
 }
