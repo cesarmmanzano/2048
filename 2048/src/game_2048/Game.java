@@ -14,16 +14,19 @@ import javax.swing.JPanel;
 
 public class Game extends JPanel implements KeyListener, Runnable, MouseListener, MouseMotionListener {
 
-    //implements -> por conta da thread
     private static final long serialVersionUID = 1L;
 
     //Inicia variáveis de altura, largura e fonte
     public static final int WIDTH = 500;
     public static final int HEIGHT = 560;
+    
+    //Fonte usada
     public static final Font main = new Font("Algerian", Font.PLAIN, 28);
 
     private Thread game;
-    private boolean running; //Checa se o jogo está rodando
+    
+    //Checa se o jogo está rodando
+    private boolean running; 
 
     //Usado para desenhar no JPanel
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);

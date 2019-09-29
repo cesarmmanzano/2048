@@ -18,6 +18,7 @@ public class Button {
     private Color released = new Color(0x00008B);
     private Color hover = new Color(0x008000);
     private Color pressed = new Color(0x008000);
+
     private Font font = Game.main.deriveFont(22f);
 
     //========================================================================//

@@ -22,7 +22,7 @@ public class HighScore {
     //Fonte do score
     public Font scoreFont;
 
-    
+    //Caminho para salvar
     public String saveFile;
 
     //Nome do arquivo
@@ -31,14 +31,22 @@ public class HighScore {
     public HighScore() {
     }
 
+    /*
+     Toda manipulção com arquivos necessita try-catch
+     Exemplo: não existencia do arquivo
+     */
     //========================================================================//
+    //Função para criar o arquivo
     public void createScore() {
         try {
-            File file = new File(saveFile, fileName);
+            //Cria arquivo com sua localização e nome
+            File file = new File(saveFile, fileName); 
+            
+            //Para poder escrever no arquivo
+            FileWriter fw = new FileWriter(file); 
+            BufferedWriter bw = new BufferedWriter(fw);
 
-            FileWriter output = new FileWriter(file);
-            BufferedWriter writer = new BufferedWriter(output);
-            writer.write("" + 0);
+            bw.write("" + 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,12 +54,16 @@ public class HighScore {
     }
 
     //========================================================================//
+    //Função para pegar o valor do arquivo
     public void loadScore() {
         try {
             File file = new File(saveFile, fileName);
+
             if (!file.isFile()) {
                 createScore();
             }
+            
+            //Leitura do arquivo
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             highScore = Integer.parseInt(reader.readLine());
             reader.close();
@@ -61,16 +73,16 @@ public class HighScore {
     }
 
     //========================================================================//
+    //Função para escrever o novo 'highScore' no arquivo
     public void setScore() {
         FileWriter output = null;
         try {
+
             File file = new File(saveFile, fileName);
             output = new FileWriter(file);
-            BufferedWriter writer = new BufferedWriter(output);
-
-            writer.write("" + highScore);
-
-            writer.close();
+            BufferedWriter bw = new BufferedWriter(output);
+            bw.write("" + highScore);
+            bw.close(); 
 
         } catch (Exception e) {
             e.printStackTrace();

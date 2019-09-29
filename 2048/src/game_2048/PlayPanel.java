@@ -13,18 +13,19 @@ public class PlayPanel extends Panel {
 
     private Gameboard board;
     private BufferedImage info;
-    //private ScoreManager scores;
     private Font scoreFont;
 
-    // Game Over
-    private Button tryAgain;
-    private Button mainMenu;
+    //Botões usados
+    private Button playAgain;
+    private Button menu;
+    
     private int smallButtonWidth = 160;
     private int spacing = 20;
     private int largeButtonWidth = smallButtonWidth * 2 + spacing;
     private int buttonHeight = 50;
     private boolean added;
     private int alpha = 0;
+    
     private Font gameOverFont;
 
     public PlayPanel() {
@@ -32,30 +33,32 @@ public class PlayPanel extends Panel {
         board = new Gameboard(Game.WIDTH / 2 - Gameboard.BOARD_WIDTH / 2, Game.HEIGHT - Gameboard.BOARD_HEIGHT - 20);
         info = new BufferedImage(Game.WIDTH, 200, BufferedImage.TYPE_INT_RGB);
 
-        mainMenu = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 450, largeButtonWidth, buttonHeight);
-        tryAgain = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 380, largeButtonWidth, buttonHeight);
+        menu = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 450, largeButtonWidth, buttonHeight);
+        playAgain = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 380, largeButtonWidth, buttonHeight);
+        
+        menu.setText("Voltar para o Menu");
+        playAgain.setText("Tentar Novamente");
 
-        tryAgain.setText("Tentar Novamente");
-        mainMenu.setText("Voltar para o Menu");
-
-        tryAgain.addActionListener(new ActionListener() {
+        //Ações ao clicar sobre o botão de jogar novamente
+        playAgain.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                board.reset();
+                board.resetBoard();
                 alpha = 0;
-                remove(tryAgain);
-                remove(mainMenu);
+                remove(playAgain);
+                remove(menu);
                 added = false;
             }
         });
 
-        mainMenu.addActionListener(new ActionListener() {
+        //Ações ao clicar sobre o botão de voltar ao menu
+        menu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                board.reset();
+                board.resetBoard();
                 alpha = 0;
-                remove(tryAgain);
-                remove(mainMenu);
+                remove(playAgain);
+                remove(menu);
                 added = false;
                 Screen.getInstance().setCurrentPanel("Menu");
             }
@@ -85,14 +88,13 @@ public class PlayPanel extends Panel {
     //========================================================================//
     @Override
     public void draw(Graphics2D g) {
-        //drawGui(g);
         board.draw(g);
 
         if (board.checkDead()) {
             if (!added) {
                 added = true;
-                add(mainMenu);
-                add(tryAgain);
+                add(menu);
+                add(playAgain);
             }
             drawGameOver(g);
         }

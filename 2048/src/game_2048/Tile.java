@@ -16,7 +16,7 @@ public class Tile {
     //Informações da peça
     public static final int WIDTH = 100; //Largura
     public static final int HEIGHT = 100; //Altura
-    public static final int TILE_SPEED = 35; //Velocidade da peça
+    public static final int SPEED = 35; //Velocidade da peça
 
     //Valor da peça -> 2, 4, 8 ...
     private int tileValue;
@@ -167,7 +167,7 @@ public class Tile {
         g.setColor(new Color(0, 0, 0, 0));
         g.fillRect(0, 0, WIDTH, HEIGHT);
         g.setColor(tileBackground);
-        g.fillRoundRect(0, 0, WIDTH, HEIGHT, 0, 0);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
         g.setColor(tileText);
 
         //Fontes dos blocos

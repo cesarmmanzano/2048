@@ -55,6 +55,7 @@ public class Gameboard extends HighScore {
     //========================================================================//
     public Gameboard(int x, int y) {
         try {
+            //Pegar a localização para salvar o arquivo
             saveFile = Gameboard.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         } catch (Exception e) {
             e.printStackTrace();
@@ -130,7 +131,7 @@ public class Gameboard extends HighScore {
 
     //==============================RESET=====================================//
     //Reseta informações quando o usuário selecionar jogar novamente
-    public void reset() {
+    public void resetBoard() {
         board = new Tile[ROWS][COLUMNS];
         start();
         loseGame = false;
@@ -200,24 +201,24 @@ public class Gameboard extends HighScore {
         int distX = current.getX() - x;
         int distY = current.getY() - y;
 
-        if (Math.abs(distX) < Tile.TILE_SPEED) {
+        if (Math.abs(distX) < Tile.SPEED) {
             current.setX(current.getX() - distX); //para nao ter flic na animacao 
         }
-        if (Math.abs(distY) < Tile.TILE_SPEED) {
+        if (Math.abs(distY) < Tile.SPEED) {
             current.setY(current.getY() - distY); //para nao ter flic na animacao 
         }
 
         if (distX < 0) {
-            current.setX(current.getX() + Tile.TILE_SPEED);
+            current.setX(current.getX() + Tile.SPEED);
         }
         if (distY < 0) {
-            current.setY(current.getY() + Tile.TILE_SPEED);
+            current.setY(current.getY() + Tile.SPEED);
         }
         if (distX > 0) {
-            current.setX(current.getX() - Tile.TILE_SPEED);
+            current.setX(current.getX() - Tile.SPEED);
         }
         if (distY > 0) {
-            current.setY(current.getY() - Tile.TILE_SPEED);
+            current.setY(current.getY() - Tile.SPEED);
         }
     }
 
