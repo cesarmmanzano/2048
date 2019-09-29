@@ -98,8 +98,8 @@ public class Tile {
         }
     }
 
-    //==========================RENDER========================================//
-    public void render(Graphics2D g) {
+    //==========================DRAW========================================//
+    public void draw(Graphics2D g) {
         if (beginningAnimation) {
             g.drawImage(beginningImage, x, y, null);
         } else if (combineAnimation) {
@@ -175,8 +175,8 @@ public class Tile {
         g.setFont(tileFont);
 
         //Centralizando texto
-        int drawX = WIDTH / 2 - DrawUtils.getMessageWidth("" + tileValue, tileFont, g) / 2;
-        int drawY = HEIGHT / 2 + DrawUtils.getMessageHeight("" + tileValue, tileFont, g) / 2;
+        int drawX = WIDTH / 2 - MessageSize.getMessageWidth("" + tileValue, tileFont, g) / 2;
+        int drawY = HEIGHT / 2 + MessageSize.getMessageHeight("" + tileValue, tileFont, g) / 2;
         g.drawString("" + tileValue, drawX, drawY);
         g.dispose();
 

@@ -29,7 +29,7 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
     private Color background;
-    private GUIScreen screen;
+    private Screen screen;
 
     //========================================================================//
     public Game() {
@@ -42,8 +42,8 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        screen = GUIScreen.getInstance();
-        screen.add("Menu", new GUIMainMenuPanel());
+        screen = Screen.getInstance();
+        screen.add("Menu", new MenuPanel());
         screen.add("Jogar", new PlayPanel());
         screen.setCurrentPanel("Menu");
     }
@@ -51,16 +51,16 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     //========================================================================//
     private void update() {
         screen.update();
-        Keyboard.update();
+        KeyboardInput.update();
     }
 
     //========================================================================//
-    private void render() {
+    private void draw() {
         Graphics2D g = (Graphics2D) image.getGraphics();
         background = new Color(0xDCDCDC);
         g.setColor(background);
         g.fillRect(0, 0, WIDTH, HEIGHT); //"Clear screen" - tela branca no fundo
-        screen.render(g);
+        screen.draw(g);
 
         g.dispose();
 
@@ -102,7 +102,7 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
 
             if (shouldRender) {
                 fps++;
-                render();
+                draw();
                 shouldRender = false;
             } else {
                 try {
@@ -152,12 +152,12 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Keyboard.keyPressed(e);
+        KeyboardInput.keyPressed(e);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Keyboard.keyReleased(e);
+        KeyboardInput.keyReleased(e);
     }
 
     //========================================================================//

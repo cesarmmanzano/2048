@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class PlayPanel extends GUIPanel {
+public class PlayPanel extends Panel {
 
     private Gameboard board;
     private BufferedImage info;
@@ -17,8 +17,8 @@ public class PlayPanel extends GUIPanel {
     private Font scoreFont;
 
     // Game Over
-    private GUIButton tryAgain;
-    private GUIButton mainMenu;
+    private Button tryAgain;
+    private Button mainMenu;
     private int smallButtonWidth = 160;
     private int spacing = 20;
     private int largeButtonWidth = smallButtonWidth * 2 + spacing;
@@ -32,8 +32,8 @@ public class PlayPanel extends GUIPanel {
         board = new Gameboard(Game.WIDTH / 2 - Gameboard.BOARD_WIDTH / 2, Game.HEIGHT - Gameboard.BOARD_HEIGHT - 20);
         info = new BufferedImage(Game.WIDTH, 200, BufferedImage.TYPE_INT_RGB);
 
-        mainMenu = new GUIButton(Game.WIDTH / 2 - largeButtonWidth / 2, 450, largeButtonWidth, buttonHeight);
-        tryAgain = new GUIButton(Game.WIDTH / 2 - largeButtonWidth / 2, 380, largeButtonWidth, buttonHeight);
+        mainMenu = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 450, largeButtonWidth, buttonHeight);
+        tryAgain = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 380, largeButtonWidth, buttonHeight);
 
         tryAgain.setText("Tentar Novamente");
         mainMenu.setText("Voltar para o Menu");
@@ -43,10 +43,8 @@ public class PlayPanel extends GUIPanel {
             public void actionPerformed(ActionEvent e) {
                 board.reset();
                 alpha = 0;
-
                 remove(tryAgain);
                 remove(mainMenu);
-
                 added = false;
             }
         });
@@ -55,20 +53,24 @@ public class PlayPanel extends GUIPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 board.reset();
+                alpha = 0;
                 remove(tryAgain);
                 remove(mainMenu);
-                GUIScreen.getInstance().setCurrentPanel("Menu");
+                added = false;
+                Screen.getInstance().setCurrentPanel("Menu");
             }
         });
     }
-    
+
+    //========================================================================//
     public void drawGameOver(Graphics2D g) {
         g.setColor(new Color(222, 222, 222, alpha));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
         g.setColor(Color.red);
-        g.drawString("FIM DE JOGO", Game.WIDTH / 2 - DrawUtils.getMessageWidth("FIM DE JOGO!", gameOverFont, g) / 2, 250);
+        g.drawString("FIM DE JOGO", Game.WIDTH / 2 - MessageSize.getMessageWidth("FIM DE JOGO!", gameOverFont, g) / 2, 250);
     }
 
+    //========================================================================//
     @Override
     public void update() {
         board.update();
@@ -80,10 +82,11 @@ public class PlayPanel extends GUIPanel {
         }
     }
 
+    //========================================================================//
     @Override
-    public void render(Graphics2D g) {
+    public void draw(Graphics2D g) {
         //drawGui(g);
-        board.render(g);
+        board.draw(g);
 
         if (board.checkDead()) {
             if (!added) {
@@ -93,6 +96,6 @@ public class PlayPanel extends GUIPanel {
             }
             drawGameOver(g);
         }
-        super.render(g);
+        super.draw(g);
     }
 }

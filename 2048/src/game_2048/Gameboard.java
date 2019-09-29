@@ -100,7 +100,7 @@ public class Gameboard extends HighScore {
     }
 
     //========================================================================//
-    public void render(Graphics2D g) {
+    public void draw(Graphics2D g) {
 
         BufferedImage finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) finalBoard.getGraphics();
@@ -114,7 +114,7 @@ public class Gameboard extends HighScore {
                 if (currently == null) {
                     continue;
                 }
-                currently.render(g2d);
+                currently.draw(g2d);
             }
         }
 
@@ -125,7 +125,7 @@ public class Gameboard extends HighScore {
         g.setFont(scoreFont);
         g.drawString("Score: " + currentScore, 30, 40);   //g.drawString(score, vertical, horizontal);
         g.setColor(bestColor);
-        g.drawString("Best: " + highScore, Game.WIDTH - DrawUtils.getMessageWidth("", scoreFont, g) - 470, 80);
+        g.drawString("Best: " + highScore, Game.WIDTH - MessageSize.getMessageWidth("", scoreFont, g) - 470, 80);
     }
 
     //==============================RESET=====================================//
@@ -424,13 +424,13 @@ public class Gameboard extends HighScore {
     //Checa qual tecla foi pressionada para mover a peça
     private void checkTypedKeys() {
         //LEFT
-        if (Keyboard.typed(KeyEvent.VK_LEFT)) {
+        if (KeyboardInput.typed(KeyEvent.VK_LEFT)) {
             moveTiles(Direction.LEFT);
             if (!gameStarted) {
                 gameStarted = true;
             }
         }
-        if (Keyboard.typed(KeyEvent.VK_A)) {
+        if (KeyboardInput.typed(KeyEvent.VK_A)) {
             moveTiles(Direction.LEFT);
             if (!gameStarted) {
                 gameStarted = true;
@@ -438,13 +438,13 @@ public class Gameboard extends HighScore {
         }
 
         //RIGHT
-        if (Keyboard.typed(KeyEvent.VK_RIGHT)) {
+        if (KeyboardInput.typed(KeyEvent.VK_RIGHT)) {
             moveTiles(Direction.RIGHT);
             if (!gameStarted) {
                 gameStarted = true;
             }
         }
-        if (Keyboard.typed(KeyEvent.VK_D)) {
+        if (KeyboardInput.typed(KeyEvent.VK_D)) {
             moveTiles(Direction.RIGHT);
             if (!gameStarted) {
                 gameStarted = true;
@@ -452,13 +452,13 @@ public class Gameboard extends HighScore {
         }
 
         //UP
-        if (Keyboard.typed(KeyEvent.VK_UP)) {
+        if (KeyboardInput.typed(KeyEvent.VK_UP)) {
             moveTiles(Direction.UP);
             if (!gameStarted) {
                 gameStarted = true;
             }
         }
-        if (Keyboard.typed(KeyEvent.VK_W)) {
+        if (KeyboardInput.typed(KeyEvent.VK_W)) {
             moveTiles(Direction.UP);
             if (!gameStarted) {
                 gameStarted = true;
@@ -466,13 +466,13 @@ public class Gameboard extends HighScore {
         }
 
         //DOWN
-        if (Keyboard.typed(KeyEvent.VK_DOWN)) {
+        if (KeyboardInput.typed(KeyEvent.VK_DOWN)) {
             moveTiles(Direction.DOWN);
             if (!gameStarted) {
                 gameStarted = true;
             }
         }
-        if (Keyboard.typed(KeyEvent.VK_S)) {
+        if (KeyboardInput.typed(KeyEvent.VK_S)) {
             moveTiles(Direction.DOWN);
             if (!gameStarted) {
                 gameStarted = true;
