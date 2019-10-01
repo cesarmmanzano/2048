@@ -53,6 +53,8 @@ public class PlayPanel extends Panel {
                 alpha = 0;
                 remove(playAgain);
                 remove(menu);
+                add(easterEgg);
+                add(newGame);
                 added = false;
             }
         });
@@ -65,6 +67,8 @@ public class PlayPanel extends Panel {
                 alpha = 0;
                 remove(playAgain);
                 remove(menu);
+                add(easterEgg);
+                add(newGame);
                 added = false;
                 Screen.getInstance().setCurrentPanel("Menu");
             }
@@ -132,6 +136,8 @@ public class PlayPanel extends Panel {
                 added = true;
                 add(menu);
                 add(playAgain);
+                remove(newGame);
+                remove(easterEgg);
             }
             drawGameWin(g);
         }else
@@ -140,6 +146,8 @@ public class PlayPanel extends Panel {
                 added = true;
                 add(menu);
                 add(playAgain);
+                remove(newGame);
+                remove(easterEgg);
             }
             drawGameOver(g);
         }
