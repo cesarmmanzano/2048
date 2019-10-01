@@ -91,6 +91,7 @@ public class PlayPanel extends Panel {
     }
 
     //========================================================================//
+    //Desenha a tela de derrota
     public void drawGameOver(Graphics2D g) {
         g.setColor(new Color(222, 222, 222, alpha));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
@@ -99,6 +100,7 @@ public class PlayPanel extends Panel {
     }
 
     //========================================================================//
+    //Desenha a tela de vitoria
     public void drawGameWin(Graphics2D g) {
         g.setColor(new Color(222, 222, 222, alpha));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
@@ -107,6 +109,7 @@ public class PlayPanel extends Panel {
     }
 
     //========================================================================//
+    //faz e checa os updates do board e caso tenha perdido a opacidade eh aumentada para desenhar
     @Override
     public void update() {
         board.update();
@@ -119,10 +122,19 @@ public class PlayPanel extends Panel {
     }
 
     //========================================================================//
+    //desenhara de acordo com a situaçao se houve vitoria,derrota,ou nenhum dos dois ainda
     @Override
     public void draw(Graphics2D g) {
         board.draw(g);
-
+        
+        if(board.checkWin()){
+            if (!added) {
+                added = true;
+                add(menu);
+                add(playAgain);
+            }
+            drawGameWin(g);
+        }else
         if (board.checkDead()) {
             if (!added) {
                 added = true;
@@ -131,14 +143,7 @@ public class PlayPanel extends Panel {
             }
             drawGameOver(g);
         }
-        if(board.checkWin()){
-            if (!added) {
-                added = true;
-                add(menu);
-                add(playAgain);
-            }
-            drawGameWin(g);
-        }
+
         super.draw(g);
     }
 }

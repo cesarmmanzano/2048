@@ -13,7 +13,6 @@ import javax.swing.*;
 public class Gameboard extends HighScore {
 
     public enum Direction {
-
         LEFT, RIGHT, UP, DOWN
     }
 
@@ -27,8 +26,7 @@ public class Gameboard extends HighScore {
     //Matriz para o jogo
     private Tile[][] board;
 
-    //Verifica derrotae e vitoria
-    private boolean loseGame;
+    //Verifica e vitoria
     private boolean winGame;
 
     //Para criar Gameboard
@@ -81,6 +79,7 @@ public class Gameboard extends HighScore {
     }
 
     //========================================================================//
+    //funcao que checa updates, seja de teclas pressionadas, um novo highscore, ou se houve vitoria
     public void update() {
         checkTypedKeys();
 
@@ -105,6 +104,7 @@ public class Gameboard extends HighScore {
     }
 
     //========================================================================//
+    //Desenha coisas como o Score atual, e o recorde(highscore) salvo no arquivo
     public void draw(Graphics2D g) {
 
         BufferedImage finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -138,7 +138,6 @@ public class Gameboard extends HighScore {
     public void resetBoard() {
         board = new Tile[ROWS][COLUMNS];
         start();
-        loseGame = false;
         winGame = false;
         gameStarted = false;
         currentScore = 0;
@@ -147,7 +146,6 @@ public class Gameboard extends HighScore {
      public void resetBoardEasterEgg() {
         board = new Tile[ROWS][COLUMNS];
         startEasterEgg();
-        loseGame = false;
         winGame = false;
         gameStarted = false;
         currentScore = 0;
@@ -175,6 +173,7 @@ public class Gameboard extends HighScore {
     }
 
     //========================================================================//
+    //inicia spawnando blocos 2 , 4
     private void start() {
         for (int i = 0; i < startingTile; i++) {
             spawnRandomTile(2, 4);
@@ -182,6 +181,7 @@ public class Gameboard extends HighScore {
 
     }
     
+    //inicia spawnando blocos 1024 , 1024
      private void startEasterEgg() {
         for (int i = 0; i < startingTile; i++) {
             spawnRandomTile(1024, 1024);
@@ -190,7 +190,7 @@ public class Gameboard extends HighScore {
     }
 
     //=======================SPAWN TILE=======================================//
-    //Spawn randomico de tiles
+    //Spawn randomico de tiles com 80% do valor1 e 20% do valor2
     private void spawnRandomTile(int value1, int value2) {
         Random random = new Random();
         int location = random.nextInt(ROWS * COLUMNS);
@@ -215,6 +215,7 @@ public class Gameboard extends HighScore {
 
     }
     //========================================================================//
+    //Arruma a velocidade para nao atrapalhar/bugar a animação de movimentacao
     private void resetPosition(Tile current, int row, int col) {
         if (current == null) {
             return;
@@ -283,7 +284,7 @@ public class Gameboard extends HighScore {
                 //}
 
                 currentScore = currentScore + board[newRow][newCol].getValue();
-            } else {
+            } else {            //senao estiver vazio ou nao poder unir com outro tile
                 move = false;
             }
         }
@@ -373,17 +374,15 @@ public class Gameboard extends HighScore {
         if (canMove) {
             spawnRandomTile(2, 4);
             checkDead();
-            //checkWin();
+            checkWin();     //Ver com o Dalton se necessario
         }
 
     }
 
     //========================================================================//
     /*
-     Checa fim do jogo
-     Percorre todas as peças checando a combinação nos arredores
-     Se não houver cobinação possível -> end game
-     */
+     Checa fim do jogo, percorre todas as peças checando a combinação nos arredores
+     Se não houver cobinação possível, fim do jogo */
     public boolean checkDead() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
@@ -405,6 +404,7 @@ public class Gameboard extends HighScore {
     }
 
     //========================================================================//
+    //Checa se houve vitoria
     public boolean checkWin() {
         if(winGame){
             return winGame;
@@ -457,7 +457,7 @@ public class Gameboard extends HighScore {
     //========================================================================//
     //Checa qual tecla foi pressionada para mover a peça
     private void checkTypedKeys() {
-        if(!winGame){
+        if(!winGame){       //se o jogo for ganho nao permite o jogardor mover a peças
         //LEFT
         if (KeyboardInput.typed(KeyEvent.VK_LEFT)) {
             moveTiles(Direction.LEFT);
