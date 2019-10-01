@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 import javax.swing.*;
@@ -51,6 +52,9 @@ public class Gameboard extends HighScore {
 
     //Verifica se o jogo iniciou
     private boolean gameStarted;
+
+    private Button newGame;
+    private MouseEvent e;
 
     //========================================================================//
     public Gameboard(int x, int y) {
@@ -164,14 +168,14 @@ public class Gameboard extends HighScore {
     //========================================================================//
     private void start() {
         for (int i = 0; i < startingTile; i++) {
-            spawnRandomTile();
+            spawnRandomTile(2, 4);
         }
 
     }
 
     //=======================SPAWN TILE=======================================//
     //Spawn randomico de tiles
-    private void spawnRandomTile() {
+    private void spawnRandomTile(int value1, int value2) {
         Random random = new Random();
         int location = random.nextInt(ROWS * COLUMNS);
         int row = 0, col = 0;
@@ -183,7 +187,12 @@ public class Gameboard extends HighScore {
         } while (board[row][col] != null);
 
         //80% de chance de spawnar 2 / 20% de chance de spawnar 4
-        int value = random.nextInt(10) < 8 ? 2 : 4;
+        int value = random.nextInt(10);
+        if (value < 8) {
+            value = 2;
+        } else {
+            value = 4;
+        }
 
         //Posição recebe a tile
         board[row][col] = new Tile(value, getTileX(col), getTileY(row));
@@ -347,8 +356,9 @@ public class Gameboard extends HighScore {
             }
         }
         if (canMove) {
-            spawnRandomTile();
+            spawnRandomTile(2, 4);
             checkDead();
+            //checkWin();
         }
 
     }
@@ -357,7 +367,7 @@ public class Gameboard extends HighScore {
     /*
      Checa fim do jogo
      Percorre todas as peças checando a combinação nos arredores
-     Se não houver cobinação possível -> end game
+     Se não houver cobinação possível -> end game (Dead)
      */
     public boolean checkDead() {
         for (int row = 0; row < ROWS; row++) {
@@ -377,6 +387,25 @@ public class Gameboard extends HighScore {
         setScore();
 
         return true;
+    }
+
+    //========================================================================//
+    //Percorre as possicoes procurando o 2048.
+    public boolean checkWin() {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                if (board[row][col].getValue() == 2048) {
+                    return true;
+                }
+            }
+        }
+
+        if (currentScore >= highScore) {
+            highScore = currentScore;
+        }
+        setScore();
+
+        return false;
     }
 
     //========================================================================//

@@ -12,8 +12,7 @@ public class MessageSize {
     }
 
     //A classe é usada para centralizar o texto quando necessário
-    
-    //=====================MESSAGE WIDTH======================================//
+   //========================================================================//
     //Largura da mensagem
     public static int getMessageWidth(String message, Font font, Graphics2D g) {
         g.setFont(font);
@@ -21,7 +20,7 @@ public class MessageSize {
         return (int) bounds.getWidth(); //Retorna largura 
     }
 
-    //=======================MESSAGE HEIGHT===================================//
+    //========================================================================//
     //Altura da mensagem
     public static int getMessageHeight(String message, Font font, Graphics2D g) {
         g.setFont(font);

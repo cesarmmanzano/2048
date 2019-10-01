@@ -6,13 +6,13 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Button {
 
     private State currentState = State.RELEASED;
     private Rectangle clickBox;
-    private ArrayList<ActionListener> actionListeners;
+    private LinkedList<ActionListener> actionListeners;
     private String text = "";
 
     private Color released = new Color(0x00008B);
@@ -23,15 +23,13 @@ public class Button {
 
     //========================================================================//
     private enum State {
-
         RELEASED, HOVER, PRESSED
     }
 
     //========================================================================//
     public Button(int x, int y, int width, int height) {
         clickBox = new Rectangle(x, y, width, height);
-        actionListeners = new ArrayList<ActionListener>();
-
+        actionListeners = new LinkedList<ActionListener>();
     }
 
     //========================================================================//
@@ -39,14 +37,15 @@ public class Button {
     }
 
     //========================================================================//
+    //Seta a cor do botao de acordo com o estado atual
     public void draw(Graphics2D g) {
-        if (currentState == State.RELEASED) {
+        if (currentState == State.RELEASED) {   //released state
             g.setColor(released);
             g.fill(clickBox);
-        } else if (currentState == State.PRESSED) {
+        } else if (currentState == State.PRESSED) { //pressed state
             g.setColor(pressed);
             g.fill(clickBox);
-        } else {
+        } else {                //hover state
             g.setColor(hover);
             g.fill(clickBox);
         }
@@ -61,6 +60,7 @@ public class Button {
     }
 
     //========================================================================//
+    //Setar o estado atual do botao
     public void mousePressed(MouseEvent e) {
         if (clickBox.contains(e.getPoint())) {
             currentState = State.PRESSED;

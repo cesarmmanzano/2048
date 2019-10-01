@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Game extends JPanel implements KeyListener, Runnable, MouseListener, MouseMotionListener {
@@ -19,14 +20,14 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     //Inicia variáveis de altura, largura e fonte
     public static final int WIDTH = 500;
     public static final int HEIGHT = 560;
-    
+
     //Fonte usada
     public static final Font main = new Font("Algerian", Font.PLAIN, 28);
 
     private Thread game;
-    
+
     //Checa se o jogo está rodando
-    private boolean running; 
+    private boolean running;
 
     //Usado para desenhar no JPanel
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -196,4 +197,26 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
         screen.mouseMoved(e);
 
     }
+    
+    public static void main(String[] args) {
+
+        //Cria novo jogo
+        Game game2048 = new Game();
+
+        //Cria janela do JFrame
+        try {
+            JFrame newGame = new JFrame("2048"); //Cria janela
+            newGame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+            newGame.setResizable(false);
+            newGame.add(game2048);
+            newGame.pack();
+            newGame.setLocationRelativeTo(null);
+            newGame.setVisible(true); //Deixa a janela visível
+        } catch (Exception e) {
+            System.out.println("Erro na abertura do JFrame");
+        }
+
+        game2048.start();   //Inicia o JOGO
+    }
+    
 }

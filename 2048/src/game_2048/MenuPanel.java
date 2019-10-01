@@ -11,12 +11,11 @@ public class MenuPanel extends Panel {
 
     private Font titleFont = Game.main.deriveFont(80f);
     public String title = "2048";
-    //private int buttonWidth = 150;
-    //private int buttonHeight = 60;
     private Game game;
 
     private Color titleColor = new Color(0x4B0082);
-
+    
+    //Classe responsavel pela tela e features do menu.
     public MenuPanel() {
         super();     
         Button playButton = new Button(Game.WIDTH / 2 - 150 / 2 - 100, 220, 150, 60);
@@ -53,7 +52,6 @@ public class MenuPanel extends Panel {
         });
         quitButton.setText("Sair");
         add(quitButton);
-
     }
 
     @Override

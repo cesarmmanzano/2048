@@ -1,10 +1,10 @@
 package game_2048;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 public class KeyboardInput {
 
-    //Classe checa quais teclas foram clicadas
     public static boolean[] pressed = new boolean[256];
     public static boolean[] previous = new boolean[256];
 
@@ -13,7 +13,7 @@ public class KeyboardInput {
 
     //========================================================================//
     public static void update() {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 9; i++) {
             //Setas
             switch (i) {
 
@@ -43,6 +43,10 @@ public class KeyboardInput {
                     break;
                 case 7:
                     previous[KeyEvent.VK_S] = pressed[KeyEvent.VK_S];
+                    break;
+                  
+                case 9:
+                    previous[MouseEvent.BUTTON1] = pressed[MouseEvent.BUTTON1];
                     break;
             }
         }
