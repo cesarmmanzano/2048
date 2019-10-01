@@ -17,7 +17,7 @@ public class PlayPanel extends Panel {
 
     //Botões usados
     private Button playAgain;
-    private Button backToMenu;
+    private Button menu;
     private Button newGame;
     private Button easterEgg;
 
@@ -26,7 +26,7 @@ public class PlayPanel extends Panel {
     private int largeButtonWidth = smallButtonWidth * 2 + spacing;
     private int buttonHeight = 50;
     private boolean added;
-    private int alpha = 0;
+    private int alpha = 0;  //eh a transparencia ou opacidade
 
     private Font gameOverFont;
 
@@ -35,12 +35,12 @@ public class PlayPanel extends Panel {
         board = new Gameboard(Game.WIDTH / 2 - Gameboard.BOARD_WIDTH / 2, Game.HEIGHT - Gameboard.BOARD_HEIGHT - 20);
         info = new BufferedImage(Game.WIDTH, 200, BufferedImage.TYPE_INT_RGB);
 
-        backToMenu = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 450, largeButtonWidth, buttonHeight);
+        menu = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 450, largeButtonWidth, buttonHeight);
         playAgain = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 380, largeButtonWidth, buttonHeight);
         newGame = new Button(Game.WIDTH / 2 - 130 / 2 + 150, 20, 130, buttonHeight);
         easterEgg = new Button(Game.WIDTH / 2 - 150 / 2 + 150, 20, 150, buttonHeight);
 
-        backToMenu.setText("Voltar para o Menu");
+        menu.setText("Voltar para o Menu");
         playAgain.setText("Tentar Novamente");
         newGame.setText("Novo Jogo");
         easterEgg.setText("");
@@ -52,25 +52,21 @@ public class PlayPanel extends Panel {
                 board.resetBoard();
                 alpha = 0;
                 remove(playAgain);
-                remove(backToMenu);              
-                add(easterEgg);
-                add(newGame);
+                remove(menu);
                 added = false;
             }
         });
 
         //Ações ao clicar sobre o botão de voltar ao menu
-        backToMenu.addActionListener(new ActionListener() {
+        menu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 board.resetBoard();
                 alpha = 0;
                 remove(playAgain);
-                remove(backToMenu);   
+                remove(menu);
                 added = false;
                 Screen.getInstance().setCurrentPanel("Menu");
-                add(easterEgg);
-                add(newGame);
             }
         });
 
@@ -78,12 +74,12 @@ public class PlayPanel extends Panel {
         easterEgg.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                board.resetBoard();
+                board.resetBoardEasterEgg();
             }
         });
         add(easterEgg);
         
-        //Ações ao clicar sobre o botão de iniciar novo jogo        
+        //Ações ao clicar sobre o botão de iniciar novo jogo
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -119,7 +115,7 @@ public class PlayPanel extends Panel {
             if (alpha > 170) {
                 alpha = 170;
             }
-        } 
+        }
     }
 
     //========================================================================//
@@ -130,14 +126,20 @@ public class PlayPanel extends Panel {
         if (board.checkDead()) {
             if (!added) {
                 added = true;
-                add(backToMenu);
+                add(menu);
                 add(playAgain);
-                remove(newGame);
-                remove(easterEgg);
             }
             drawGameOver(g);
         }
-        
+        if(board.checkWin()){
+            if (!added) {
+                added = true;
+                add(menu);
+                add(playAgain);
+            }
+            drawGameWin(g);
+        }
         super.draw(g);
     }
 }
+

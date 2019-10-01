@@ -130,7 +130,7 @@ public class Gameboard extends HighScore {
         g.setFont(scoreFont);
         g.drawString("Score: " + currentScore, 30, 40);   //g.drawString(score, vertical, horizontal);
         g.setColor(bestColor);
-        g.drawString("Best: " + highScore, Game.WIDTH - MessageSize.getMessageWidth("", scoreFont, g) - 470, 80);
+        g.drawString("RECORDE: " + highScore, Game.WIDTH - MessageSize.getMessageWidth("RECORDE", scoreFont, g) - 341, 80);
     }
 
     //==============================RESET=====================================//
@@ -138,6 +138,15 @@ public class Gameboard extends HighScore {
     public void resetBoard() {
         board = new Tile[ROWS][COLUMNS];
         start();
+        loseGame = false;
+        winGame = false;
+        gameStarted = false;
+        currentScore = 0;
+    }
+    
+     public void resetBoardEasterEgg() {
+        board = new Tile[ROWS][COLUMNS];
+        startEasterEgg();
         loseGame = false;
         winGame = false;
         gameStarted = false;
@@ -172,6 +181,13 @@ public class Gameboard extends HighScore {
         }
 
     }
+    
+     private void startEasterEgg() {
+        for (int i = 0; i < startingTile; i++) {
+            spawnRandomTile(1024, 1024);
+        }
+
+    }
 
     //=======================SPAWN TILE=======================================//
     //Spawn randomico de tiles
@@ -189,16 +205,15 @@ public class Gameboard extends HighScore {
         //80% de chance de spawnar 2 / 20% de chance de spawnar 4
         int value = random.nextInt(10);
         if (value < 8) {
-            value = 2;
+            value = value1;
         } else {
-            value = 4;
+            value = value2;
         }
 
         //Posição recebe a tile
         board[row][col] = new Tile(value, getTileX(col), getTileY(row));
 
     }
-
     //========================================================================//
     private void resetPosition(Tile current, int row, int col) {
         if (current == null) {
@@ -367,7 +382,7 @@ public class Gameboard extends HighScore {
     /*
      Checa fim do jogo
      Percorre todas as peças checando a combinação nos arredores
-     Se não houver cobinação possível -> end game (Dead)
+     Se não houver cobinação possível -> end game
      */
     public boolean checkDead() {
         for (int row = 0; row < ROWS; row++) {
@@ -390,21 +405,10 @@ public class Gameboard extends HighScore {
     }
 
     //========================================================================//
-    //Percorre as possicoes procurando o 2048.
     public boolean checkWin() {
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
-                if (board[row][col].getValue() == 2048) {
-                    return true;
-                }
-            }
-        }
-
-        if (currentScore >= highScore) {
-            highScore = currentScore;
-        }
-        setScore();
-
+        if(winGame){
+            return winGame;
+        }            
         return false;
     }
 
@@ -453,6 +457,7 @@ public class Gameboard extends HighScore {
     //========================================================================//
     //Checa qual tecla foi pressionada para mover a peça
     private void checkTypedKeys() {
+        if(!winGame){
         //LEFT
         if (KeyboardInput.typed(KeyEvent.VK_LEFT)) {
             moveTiles(Direction.LEFT);
@@ -509,7 +514,7 @@ public class Gameboard extends HighScore {
             }
         }
     }
-
+ }
     //========================GETTERS e SETTERS===============================//
     public int getTileX(int col) {
         return SPACING + col * Tile.WIDTH + col * SPACING;
@@ -518,4 +523,5 @@ public class Gameboard extends HighScore {
     public int getTileY(int row) {
         return SPACING + row * Tile.HEIGHT + row * SPACING;
     }
+
 }

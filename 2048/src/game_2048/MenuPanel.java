@@ -14,8 +14,7 @@ public class MenuPanel extends Panel {
     private Game game;
 
     private Color titleColor = new Color(0x4B0082);
-    
-    //Classe responsavel pela tela e features do menu.
+
     public MenuPanel() {
         super();     
         Button playButton = new Button(Game.WIDTH / 2 - 150 / 2 - 100, 220, 150, 60);

@@ -114,7 +114,7 @@ public class Tile {
     private void drawTile() {
         Graphics2D g = (Graphics2D) tileImage.getGraphics();
 
-        //Atribuição das cores das peças, txto e background
+        //Atribuição das cores das peças
         switch (tileValue) {
             case 2:
                 tileBackground = new Color(0xEEE4DA);   //Cor da peça
@@ -227,8 +227,7 @@ public class Tile {
     public boolean isCombineAnimation() {
         return combineAnimation;
     }
-    
-    //para animaçao de combinacao
+
     public void setCombineAnimation(boolean combineAnimation) {
         this.combineAnimation = combineAnimation;
         if (combineAnimation) {

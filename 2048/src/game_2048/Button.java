@@ -23,6 +23,7 @@ public class Button {
 
     //========================================================================//
     private enum State {
+
         RELEASED, HOVER, PRESSED
     }
 
@@ -30,6 +31,7 @@ public class Button {
     public Button(int x, int y, int width, int height) {
         clickBox = new Rectangle(x, y, width, height);
         actionListeners = new LinkedList<ActionListener>();
+
     }
 
     //========================================================================//
@@ -37,15 +39,14 @@ public class Button {
     }
 
     //========================================================================//
-    //Seta a cor do botao de acordo com o estado atual
     public void draw(Graphics2D g) {
-        if (currentState == State.RELEASED) {   //released state
+        if (currentState == State.RELEASED) {
             g.setColor(released);
             g.fill(clickBox);
-        } else if (currentState == State.PRESSED) { //pressed state
+        } else if (currentState == State.PRESSED) {
             g.setColor(pressed);
             g.fill(clickBox);
-        } else {                //hover state
+        } else {
             g.setColor(hover);
             g.fill(clickBox);
         }
@@ -60,7 +61,6 @@ public class Button {
     }
 
     //========================================================================//
-    //Setar o estado atual do botao
     public void mousePressed(MouseEvent e) {
         if (clickBox.contains(e.getPoint())) {
             currentState = State.PRESSED;
