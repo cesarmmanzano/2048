@@ -36,31 +36,25 @@ public class Screen {
     public void add(String panelName, Panel panel) {
         panels.put(panelName, panel);
     }
-    
-    public void setCurrentPanel(String panelName){
+
+    public void setCurrentPanel(String panelName) {
         currentPanel = panelName;
     }
-    
-    public void mousePressed(MouseEvent e){
-        if(panels.get(currentPanel) != null){
-            panels.get(currentPanel).mousePressed(e);
-        }
-    }
-    
-    public void mouseReleased(MouseEvent e){
-        if(panels.get(currentPanel) != null){
+
+    public void mouseReleased(MouseEvent e) {
+        if (panels.get(currentPanel) != null) {
             panels.get(currentPanel).mouseReleased(e);
         }
     }
-    
-    public void mouseDragged(MouseEvent e){
-        if(panels.get(currentPanel) != null){
+
+    public void mouseDragged(MouseEvent e) {
+        if (panels.get(currentPanel) != null) {
             panels.get(currentPanel).mouseDragged(e);
         }
     }
-    
-    public void mouseMoved(MouseEvent e){
-        if(panels.get(currentPanel) != null){
+
+    public void mouseMoved(MouseEvent e) {
+        if (panels.get(currentPanel) != null) {
             panels.get(currentPanel).mouseMoved(e);
         }
     }

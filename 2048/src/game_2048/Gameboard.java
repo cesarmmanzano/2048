@@ -11,10 +11,11 @@ import java.util.Random;
 //========================================================================//
 public class Gameboard extends HighScore {
 
-    public static final String LEFT = "LEFT";
-    public static final String RIGHT = "RIGHT";
-    public static final String UP = "UP";
-    public static final String DOWN = "DOWN";
+    //Direções
+    public static final int LEFT = 0;
+    public static final int RIGHT = 1;
+    public static final int UP = 2;
+    public static final int DOWN = 3;
 
     //Board será 4x4
     public static final int ROWS = 4;
@@ -32,10 +33,9 @@ public class Gameboard extends HighScore {
     //Para criar Gameboard
     private BufferedImage gameBoard;
 
-    //private BufferedImage finalBoard;
     //Cores de fundo do board e do bloco
     private Color backgroundBoard = new Color(0x776E65);
-    private Color backgroundRect = new Color(0xD8BFD8);
+    private Color backgroundTile = new Color(0xD8BFD8);
 
     //Posição para desenhar na tela
     private int x;
@@ -64,11 +64,10 @@ public class Gameboard extends HighScore {
         board = new Tile[ROWS][COLUMNS];   //Board 4x4
 
         gameBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        //finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
         loadScore();
         createBoardImage();
-        start();
+        startGame();
     }
 
     //========================================================================//
@@ -100,8 +99,8 @@ public class Gameboard extends HighScore {
     //Desenha coisas como o Score atual, e o recorde(highscore) salvo no arquivo
     public void draw(Graphics2D g) {
 
-        BufferedImage finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = (Graphics2D) finalBoard.getGraphics();
+        BufferedImage BI = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = (Graphics2D) BI.getGraphics();
         g2d.setColor(new Color(0, 0, 0, 0));
         g2d.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
         g2d.drawImage(gameBoard, 0, 0, null);
@@ -116,12 +115,12 @@ public class Gameboard extends HighScore {
             }
         }
 
-        g.drawImage(finalBoard, x, y, null);
+        g.drawImage(BI, x, y, null);
         g2d.dispose();
 
         g.setColor(scoreColor);
         g.setFont(scoreFont);
-        g.drawString("Score: " + currentScore, 30, 40);   //g.drawString(score, vertical, horizontal);
+        g.drawString("PONTUAÇÃO: " + currentScore, 30, 40);   //g.drawString(score, horizontal, vertical);
         g.setColor(bestColor);
         g.drawString("RECORDE: " + highScore, Game.WIDTH - MessageSize.getMessageWidth("RECORDE", scoreFont, g) - 341, 80);
     }
@@ -130,7 +129,7 @@ public class Gameboard extends HighScore {
     //Reseta informações quando o usuário selecionar jogar novamente
     public void resetBoard() {
         board = new Tile[ROWS][COLUMNS];
-        start();
+        startGame();
         winGame = false;
         gameStarted = false;
         currentScore = 0;
@@ -154,20 +153,21 @@ public class Gameboard extends HighScore {
         g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 
         //Cor de fundo de cada bloco 
-        g.setColor(backgroundRect);
+        g.setColor(backgroundTile);
+
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 int x = SPACING + SPACING * col + Tile.WIDTH * col;
                 int y = SPACING + SPACING * row + Tile.HEIGHT * row;
-                g.fillRoundRect(x, y, Tile.WIDTH, Tile.HEIGHT, 0, 0);
+                g.fillRect(x, y, Tile.WIDTH, Tile.HEIGHT);
             }
         }
 
     }
 
     //========================================================================//
-    //inicia spawnando blocos 2 , 4
-    private void start() {
+    //Inicia spawnando blocos 2 , 4
+    private void startGame() {
         for (int i = 0; i < startingTile; i++) {
             spawnRandomTile(2, 4);
         }
@@ -182,8 +182,8 @@ public class Gameboard extends HighScore {
 
     }
 
-    //=======================SPAWN TILE=======================================//
-    //Spawn randomico de tiles com 80% do valor1 e 20% do valor2
+    //========================================================================//
+    //Spawn randomico
     private void spawnRandomTile(int value1, int value2) {
         Random random = new Random();
         int location = random.nextInt(ROWS * COLUMNS);
@@ -243,11 +243,11 @@ public class Gameboard extends HighScore {
 
     //========================================================================//
     //Checa se é possivel mover as peças
-    private boolean move(int row, int col, int horizontalDirection, int verticalDirection, String dir) {
+    private boolean move(int row, int col, int horizontalDirection, int verticalDirection, int dir) {
         boolean canMove = false;
 
-        Tile current = board[row][col];
-        if (current == null) {
+        Tile tile = board[row][col];
+        if (tile == null) {
             return false;
         }
         boolean move = true;
@@ -260,22 +260,20 @@ public class Gameboard extends HighScore {
             if (outOfBounds(dir, newRow, newCol)) {
                 break;
             }
-            if (board[newRow][newCol] == null) { //se esta vazio
-                board[newRow][newCol] = current;
+            if (board[newRow][newCol] == null) {
+                board[newRow][newCol] = tile;
                 board[newRow - verticalDirection][newCol - horizontalDirection] = null;
 
                 board[newRow][newCol].setSlideTo(new Point(newRow, newCol));
                 canMove = true;
-            } else if (board[newRow][newCol].getValue() == current.getValue() && board[newRow][newCol].iscanCombine()) { //se da pra combinar
+            } else if (board[newRow][newCol].getValue() == tile.getValue() && board[newRow][newCol].iscanCombine()) { //se da pra combinar
                 board[newRow][newCol].setCanCombine(false);
                 board[newRow][newCol].setValue(board[newRow][newCol].getValue() * 2);
                 canMove = true;
                 board[newRow - verticalDirection][newCol - horizontalDirection] = null;
                 board[newRow][newCol].setSlideTo(new Point(newRow, newCol));
 
-                //if (board[newRow][newCol].getValue() == 4) {
                 board[newRow][newCol].setCombineAnimation(true);
-                //}
 
                 currentScore = currentScore + board[newRow][newCol].getValue();
             } else {            //senao estiver vazio ou nao poder unir com outro tile
@@ -288,7 +286,7 @@ public class Gameboard extends HighScore {
 
     //========================================================================//
     //Checa limite do board
-    private boolean outOfBounds(String dir, int row, int col) {
+    private boolean outOfBounds(int dir, int row, int col) {
         if (dir == LEFT) {
             return col < 0;
         } else if (dir == RIGHT) {
@@ -305,21 +303,21 @@ public class Gameboard extends HighScore {
     //Move as peças do jogo
     private void moveLeft() {
         boolean canMove = false;
-        int horizontalDirection = 0;
-        int verticalDirection = 0;
-        horizontalDirection = -1;
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
+        int horizontal = -1;
+        int vertical = 0;
+
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
                 if (!canMove) {
-                    canMove = move(row, col, horizontalDirection, verticalDirection, LEFT);
+                    canMove = move(i, j, horizontal, vertical, LEFT);
                 } else {
-                    move(row, col, horizontalDirection, verticalDirection, LEFT);
+                    move(i, j, horizontal, vertical, LEFT);
                 }
             }
         }
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
-                Tile current = board[row][col];
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                Tile current = board[i][j];
                 if (current == null) {
                     continue;
                 }
@@ -335,21 +333,21 @@ public class Gameboard extends HighScore {
 
     private void moveRight() {
         boolean canMove = false;
-        int horizontalDirection = 0;
-        int verticalDirection = 0;
-        horizontalDirection = +1;
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = COLUMNS - 1; col >= 0; col--) {
+        int horizontal = 1;
+        int vertical = 0;
+
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = COLUMNS - 1; j >= 0; j--) {
                 if (!canMove) {
-                    canMove = move(row, col, horizontalDirection, verticalDirection, RIGHT);
+                    canMove = move(i, j, horizontal, vertical, RIGHT);
                 } else {
-                    move(row, col, horizontalDirection, verticalDirection, RIGHT);
+                    move(i, j, horizontal, vertical, RIGHT);
                 }
             }
         }
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
-                Tile current = board[row][col];
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                Tile current = board[i][j];
                 if (current == null) {
                     continue;
                 }
@@ -365,21 +363,21 @@ public class Gameboard extends HighScore {
 
     private void moveUp() {
         boolean canMove = false;
-        int horizontalDirection = 0;
-        int verticalDirection = 0;
-        verticalDirection = -1;
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
+        int horizontal = 0;
+        int vertical = -1;
+
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
                 if (!canMove) {
-                    canMove = move(row, col, horizontalDirection, verticalDirection, UP);
+                    canMove = move(i, j, horizontal, vertical, UP);
                 } else {
-                    move(row, col, horizontalDirection, verticalDirection, UP);
+                    move(i, j, horizontal, vertical, UP);
                 }
             }
         }
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
-                Tile current = board[row][col];
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                Tile current = board[i][j];
                 if (current == null) {
                     continue;
                 }
@@ -395,21 +393,21 @@ public class Gameboard extends HighScore {
 
     private void moveDown() {
         boolean canMove = false;
-        int horizontalDirection = 0;
-        int verticalDirection = 0;
-        verticalDirection = 1;
-        for (int row = ROWS - 1; row >= 0; row--) {
-            for (int col = 0; col < COLUMNS; col++) {
+        int horizontal = 0;
+        int vertical = 1;
+
+        for (int i = ROWS - 1; i >= 0; i--) {
+            for (int j = 0; j < COLUMNS; j++) {
                 if (!canMove) {
-                    canMove = move(row, col, horizontalDirection, verticalDirection, DOWN);
+                    canMove = move(i, j, horizontal, vertical, DOWN);
                 } else {
-                    move(row, col, horizontalDirection, verticalDirection, DOWN);
+                    move(i, j, horizontal, vertical, DOWN);
                 }
             }
         }
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
-                Tile current = board[row][col];
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                Tile current = board[i][j];
                 if (current == null) {
                     continue;
                 }

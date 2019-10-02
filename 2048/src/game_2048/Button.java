@@ -17,17 +17,18 @@ public class Button {
 
     private Color released = new Color(0x00008B);
     private Color hover = new Color(0x008000);
-    private Color pressed = new Color(0x008000);
 
     private Font font = Game.main.deriveFont(22f);
 
     //========================================================================//
+    //Estados do botao
     private enum State {
 
-        RELEASED, HOVER, PRESSED
+        RELEASED, HOVER
     }
 
     //========================================================================//
+    //Construtor do botao
     public Button(int x, int y, int width, int height) {
         clickBox = new Rectangle(x, y, width, height);
         actionListeners = new LinkedList<ActionListener>();
@@ -39,12 +40,10 @@ public class Button {
     }
 
     //========================================================================//
+    //Desenha o botao de acordo com o estado
     public void draw(Graphics2D g) {
         if (currentState == State.RELEASED) {
             g.setColor(released);
-            g.fill(clickBox);
-        } else if (currentState == State.PRESSED) {
-            g.setColor(pressed);
             g.fill(clickBox);
         } else {
             g.setColor(hover);
@@ -61,12 +60,7 @@ public class Button {
     }
 
     //========================================================================//
-    public void mousePressed(MouseEvent e) {
-        if (clickBox.contains(e.getPoint())) {
-            currentState = State.PRESSED;
-        }
-    }
-
+    //Set dos estados do botao
     public void mouseReleased(MouseEvent e) {
         if (clickBox.contains(e.getPoint())) {
             for (ActionListener al : actionListeners) {
@@ -78,8 +72,6 @@ public class Button {
 
     public void mouseDragged(MouseEvent e) {
         if (clickBox.contains(e.getPoint())) {
-            currentState = State.PRESSED;
-        } else {
             currentState = State.RELEASED;
         }
     }
@@ -92,8 +84,7 @@ public class Button {
         }
     }
 
-    //========================================================================//
-    //Getters e Setters
+    //========================GETTERS e SETTERS===============================//
     public int getX() {
         return clickBox.x;
     }

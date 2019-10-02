@@ -22,8 +22,6 @@ public class HighScore {
     //Fonte do score
     public Font scoreFont;
 
-    //Nome do arquivo
-
     public HighScore() {
     }
 
@@ -36,10 +34,10 @@ public class HighScore {
     public void createScore() {
         try {
             //Cria arquivo com sua localização e nome
-            File file = new File("build\\classes\\SaveHighScore.txt"); 
-            
+            File file = new File("build\\classes\\SaveHighScore.txt");
+
             //Para poder escrever no arquivo
-            FileWriter fw = new FileWriter(file); 
+            FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
 
             bw.write("" + 0);
@@ -55,15 +53,15 @@ public class HighScore {
         try {
             File file = new File("build\\classes\\SaveHighScore.txt");
             Scanner sc = new Scanner(file);
-            
+
             //Se o arquivo não existe
             if (!file.isFile()) {
                 createScore();
             }
-            
+
             //Leitura do arquivo
             highScore = parseInt(sc.next()); //String para inteiro
-            
+
             sc.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,7 +76,7 @@ public class HighScore {
 
             Formatter file = new Formatter("build\\classes\\SaveHighScore.txt");
             file.format("" + highScore);
-            file.close(); 
+            file.close();
 
         } catch (Exception e) {
             e.printStackTrace();

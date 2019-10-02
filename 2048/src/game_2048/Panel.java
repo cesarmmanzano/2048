@@ -37,12 +37,6 @@ public class Panel {
     }
 
     //========================================================================//
-    public void mousePressed(MouseEvent e) {
-        for (Button b : buttons) {
-            b.mousePressed(e);
-        }
-    }
-
     public void mouseReleased(MouseEvent e) {
         for (Button b : buttons) {
             b.mouseReleased(e);

@@ -3,6 +3,7 @@ package game_2048;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import static java.awt.Font.ITALIC;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -22,8 +23,9 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     public static final int HEIGHT = 560;
 
     //Fonte usada
-    public static final Font main = new Font("Algerian", Font.PLAIN, 28);
+    public static final Font main = new Font("Algerian", ITALIC, 28);
 
+    //Para que as atualizações/desenhos sejam feitos ao mesmo tempo do que o gui e swing
     private Thread game;
 
     //Checa se o jogo está rodando
@@ -37,6 +39,8 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
 
     //========================================================================//
     public Game() {
+
+        //Para poder usar o teclado
         setFocusable(true);
 
         //Determina tamanho do frame
@@ -63,7 +67,7 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
         Graphics2D g = (Graphics2D) image.getGraphics();
         background = new Color(0xDCDCDC);
         g.setColor(background);
-        g.fillRect(0, 0, WIDTH, HEIGHT); //"Clear screen" - tela branca no fundo
+        g.fillRect(0, 0, WIDTH, HEIGHT);
         screen.draw(g);
 
         g.dispose();
@@ -119,8 +123,6 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
 
         //FPS Timer
         if (System.currentTimeMillis() - fpsTimer > 1000) {
-            System.out.printf("%d fps %d updates", fps, updates);
-            System.out.println();
             fps = 0;
             updates = 0;
             fpsTimer += 1000;
@@ -151,7 +153,6 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     //========================================================================//
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
@@ -171,7 +172,6 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-        screen.mousePressed(e);
     }
 
     @Override
@@ -197,16 +197,15 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
         screen.mouseMoved(e);
 
     }
-    
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         //Cria novo jogo
         Game game2048 = new Game();
 
         //Cria janela do JFrame
         try {
             JFrame newGame = new JFrame("2048"); //Cria janela
-            newGame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+            newGame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             newGame.setResizable(false);
             newGame.add(game2048);
             newGame.pack();
@@ -218,5 +217,5 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
 
         game2048.start();   //Inicia o JOGO
     }
-    
+
 }

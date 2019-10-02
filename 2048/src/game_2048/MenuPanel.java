@@ -16,8 +16,10 @@ public class MenuPanel extends Panel {
     private Color titleColor = new Color(0x4B0082);
 
     public MenuPanel() {
-        super();     
-        Button playButton = new Button(Game.WIDTH / 2 - 150 / 2 - 100, 220, 150, 60);
+        super();
+        //instancia dos botoes do menu, suas açoes, e texto
+        //botao para jogar
+        Button playButton = new Button(game.WIDTH / 2 - 150 / 2 - 100, 220, 150, 60);
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -27,7 +29,8 @@ public class MenuPanel extends Panel {
         playButton.setText("Jogar");
         add(playButton);
 
-        Button gitButton = new Button(Game.WIDTH / 2 - 150 / 2 + 100, 220, 150, 60);
+        //botao para o gitHub
+        Button gitButton = new Button(game.WIDTH / 2 - 150 / 2 + 100, 220, 150, 60);
         gitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -42,7 +45,8 @@ public class MenuPanel extends Panel {
         gitButton.setText("GitHub");
         add(gitButton);
 
-        Button quitButton = new Button(Game.WIDTH / 2 - 350 / 2, 320, 350, 60);
+        //botao para sair
+        Button quitButton = new Button(game.WIDTH / 2 - 350 / 2, 320, 350, 60);
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -53,11 +57,12 @@ public class MenuPanel extends Panel {
         add(quitButton);
     }
 
+    //Desenhar o que ha para desenhar de panel e o texto "2048"
     @Override
     public void draw(Graphics2D g) {
         super.draw(g);
         g.setFont(titleFont);
         g.setColor(titleColor);
-        g.drawString(title, Game.WIDTH / 2 - MessageSize.getMessageWidth(title, titleFont, g) / 2, 125);
+        g.drawString(title, game.WIDTH / 2 - MessageSize.getMessageWidth(title, titleFont, g) / 2, 125);
     }
 }

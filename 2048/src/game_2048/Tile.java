@@ -5,9 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
-import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 //========================================================================//
@@ -37,11 +35,11 @@ public class Tile {
     private int y;
 
     //Para animações
-    private boolean beginningAnimation = true;
-    private double scaleFirst = 0.1;
-    private BufferedImage beginningImage;
+    private boolean startAnimation = true;
+    private double renderSpeed = 0.1; //Velocidade da animação
+    private BufferedImage startImage;
     private boolean combineAnimation = false;
-    private double scaleCombine = 1.3;
+    private double inicialSize = 0.3; //Tamanho inicial do bloco na animação
     private BufferedImage combineImage;
 
     //Para checar a combinação das peças
@@ -57,7 +55,8 @@ public class Tile {
         //Nova imagem do bloco
         tileImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
-        beginningImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        //Animações
+        startImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
         combineImage = new BufferedImage(WIDTH * 2, HEIGHT * 2, BufferedImage.TYPE_INT_ARGB);
 
         drawTile(); //Desenha número desejado
@@ -65,45 +64,50 @@ public class Tile {
 
     //===========================UPDATE=======================================//
     public void update() {
-        if (beginningAnimation) {
+        animation();
+    }
+
+    //============================ANIMATION===================================//
+    public void animation() {
+        if (startAnimation) {
             AffineTransform transform = new AffineTransform();
-            transform.translate(WIDTH / 2 - scaleFirst * WIDTH / 2, HEIGHT / 2 - scaleFirst * HEIGHT / 2);
-            transform.scale(scaleFirst, scaleFirst);
-            Graphics2D g2d = (Graphics2D) beginningImage.getGraphics();
+            transform.translate(WIDTH / 2 - renderSpeed * WIDTH / 2, HEIGHT / 2 - renderSpeed * HEIGHT / 2);
+            transform.scale(renderSpeed, renderSpeed);
+            Graphics2D g2d = (Graphics2D) startImage.getGraphics();
             g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
             g2d.setColor(new Color(0, 0, 0, 0));
             g2d.fillRect(0, 0, WIDTH, HEIGHT);
-            g2d.drawImage(beginningImage, transform, null);
-            scaleFirst = scaleFirst + 0.1;
+            g2d.drawImage(startImage, transform, null);
+            renderSpeed = renderSpeed + 0.1;
             g2d.dispose();
 
-            if (scaleFirst >= 1) {
-                beginningAnimation = false;
+            if (renderSpeed >= 2) {
+                startAnimation = false;
             }
         } else if (combineAnimation) {
             AffineTransform transform = new AffineTransform();
-            transform.translate(WIDTH / 2 - scaleCombine * WIDTH / 2, HEIGHT / 2 - scaleCombine * HEIGHT / 2);
-            transform.scale(scaleCombine, scaleCombine);
+            transform.translate(WIDTH / 2 - inicialSize * WIDTH / 2, HEIGHT / 2 - inicialSize * HEIGHT / 2);
+            transform.scale(inicialSize, inicialSize);
             Graphics2D g2d = (Graphics2D) combineImage.getGraphics();
             g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
             g2d.setColor(new Color(0, 0, 0, 0));
             g2d.fillRect(0, 0, WIDTH, HEIGHT);
             g2d.drawImage(tileImage, transform, null);
-            scaleCombine = scaleCombine - 0.05;
+            inicialSize = inicialSize + 0.1;
             g2d.dispose();
 
-            if (scaleCombine <= 1) {
+            if (inicialSize >= 1) {
                 combineAnimation = false;
             }
         }
     }
 
-    //==========================DRAW========================================//
+    //============================DRAW========================================//
     public void draw(Graphics2D g) {
-        if (beginningAnimation) {
-            g.drawImage(beginningImage, x, y, null);
+        if (startAnimation) {
+            g.drawImage(startImage, x, y, null);
         } else if (combineAnimation) {
-            g.drawImage(combineImage, (int) (x + WIDTH / 2 - scaleCombine * WIDTH / 2), (int) (y + HEIGHT / 2 - scaleCombine * HEIGHT / 2), null);
+            g.drawImage(combineImage, (int) (x + WIDTH / 2 - inicialSize * WIDTH / 2), (int) (y + HEIGHT / 2 - inicialSize * HEIGHT / 2), null);
         } else {
             g.drawImage(tileImage, x, y, null);
         }
@@ -231,7 +235,7 @@ public class Tile {
     public void setCombineAnimation(boolean combineAnimation) {
         this.combineAnimation = combineAnimation;
         if (combineAnimation) {
-            scaleCombine = 1.3;
+            inicialSize = 0.5;
         }
     }
 

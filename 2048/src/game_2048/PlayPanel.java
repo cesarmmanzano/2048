@@ -7,10 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
-
 public class PlayPanel extends Panel {
 
+    //Tabuleiro do jogo 
     private Gameboard board;
     private BufferedImage info;
     private Font scoreFont;
@@ -25,8 +24,8 @@ public class PlayPanel extends Panel {
     private int spacing = 20;
     private int largeButtonWidth = smallButtonWidth * 2 + spacing;
     private int buttonHeight = 50;
-    private boolean added;
-    private int alpha = 0;  //eh a transparencia ou opacidade
+    private boolean added;  //verificador para saber se ja foi adicionado a tela de vitoria/derreta
+    private int alpha = 0;  //eh a transparencia/opacidade
 
     private Font gameOverFont;
 
@@ -35,11 +34,13 @@ public class PlayPanel extends Panel {
         board = new Gameboard(Game.WIDTH / 2 - Gameboard.BOARD_WIDTH / 2, Game.HEIGHT - Gameboard.BOARD_HEIGHT - 20);
         info = new BufferedImage(Game.WIDTH, 200, BufferedImage.TYPE_INT_RGB);
 
+        //instancia dos botoes
         menu = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 450, largeButtonWidth, buttonHeight);
         playAgain = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 380, largeButtonWidth, buttonHeight);
         newGame = new Button(Game.WIDTH / 2 - 130 / 2 + 150, 20, 130, buttonHeight);
         easterEgg = new Button(Game.WIDTH / 2 - 150 / 2 + 150, 20, 150, buttonHeight);
 
+        //texto dos botoes
         menu.setText("Voltar para o Menu");
         playAgain.setText("Tentar Novamente");
         newGame.setText("Novo Jogo");
@@ -82,7 +83,7 @@ public class PlayPanel extends Panel {
             }
         });
         add(easterEgg);
-        
+
         //Ações ao clicar sobre o botão de iniciar novo jogo
         newGame.addActionListener(new ActionListener() {
             @Override
@@ -113,7 +114,7 @@ public class PlayPanel extends Panel {
     }
 
     //========================================================================//
-    //faz e checa os updates do board e caso tenha perdido a opacidade eh aumentada para desenhar
+    //Faz e checa os updates do board e caso tenha perdido a opacidade eh aumentada para desenhar
     @Override
     public void update() {
         board.update();
@@ -126,12 +127,12 @@ public class PlayPanel extends Panel {
     }
 
     //========================================================================//
-    //desenhara de acordo com a situaçao se houve vitoria,derrota,ou nenhum dos dois ainda
+    //Desenha de acordo com a situaçao se houve vitoria,derrota
     @Override
     public void draw(Graphics2D g) {
         board.draw(g);
-        
-        if(board.checkWin()){
+
+        if (board.checkWin()) {
             if (!added) {
                 added = true;
                 add(menu);
@@ -140,8 +141,7 @@ public class PlayPanel extends Panel {
                 remove(easterEgg);
             }
             drawGameWin(g);
-        }else
-        if (board.checkDead()) {
+        } else if (board.checkDead()) {
             if (!added) {
                 added = true;
                 add(menu);
@@ -155,4 +155,3 @@ public class PlayPanel extends Panel {
         super.draw(g);
     }
 }
-
