@@ -2,12 +2,12 @@ package game_2048;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.InputStreamReader;
+import static java.lang.Integer.parseInt;
+import java.util.Formatter;
+import java.util.Scanner;
 
 public class HighScore {
 
@@ -22,11 +22,7 @@ public class HighScore {
     //Fonte do score
     public Font scoreFont;
 
-    //Caminho para salvar
-    public String saveFile;
-
     //Nome do arquivo
-    public String fileName = "SaveHighScore";
 
     public HighScore() {
     }
@@ -40,7 +36,7 @@ public class HighScore {
     public void createScore() {
         try {
             //Cria arquivo com sua localização e nome
-            File file = new File(saveFile, fileName); 
+            File file = new File("build\\classes\\SaveHighScore.txt"); 
             
             //Para poder escrever no arquivo
             FileWriter fw = new FileWriter(file); 
@@ -54,19 +50,21 @@ public class HighScore {
     }
 
     //========================================================================//
-    //Função para pegar o valor do arquivo
+    //Função dar load no valor do arquivo
     public void loadScore() {
         try {
-            File file = new File(saveFile, fileName);
-
+            File file = new File("build\\classes\\SaveHighScore.txt");
+            Scanner sc = new Scanner(file);
+            
+            //Se o arquivo não existe
             if (!file.isFile()) {
                 createScore();
             }
             
             //Leitura do arquivo
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-            highScore = Integer.parseInt(reader.readLine());
-            reader.close();
+            highScore = parseInt(sc.next()); //String para inteiro
+            
+            sc.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,11 +76,9 @@ public class HighScore {
         FileWriter output = null;
         try {
 
-            File file = new File(saveFile, fileName);
-            output = new FileWriter(file);
-            BufferedWriter bw = new BufferedWriter(output);
-            bw.write("" + highScore);
-            bw.close(); 
+            Formatter file = new Formatter("build\\classes\\SaveHighScore.txt");
+            file.format("" + highScore);
+            file.close(); 
 
         } catch (Exception e) {
             e.printStackTrace();

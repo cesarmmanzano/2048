@@ -55,14 +55,7 @@ public class Gameboard extends HighScore {
     private MouseEvent e;
 
     //========================================================================//
-    public Gameboard(int x, int y) {
-        try {
-            //Pegar a localização para salvar o arquivo
-            saveFile = Gameboard.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public Gameboard(int x, int y) {       
         scoreFont = Game.main.deriveFont(30f);
 
         this.x = x;
@@ -142,8 +135,8 @@ public class Gameboard extends HighScore {
         gameStarted = false;
         currentScore = 0;
     }
-    
-     public void resetBoardEasterEgg() {
+
+    public void resetBoardEasterEgg() {
         board = new Tile[ROWS][COLUMNS];
         startEasterEgg();
         winGame = false;
@@ -180,9 +173,9 @@ public class Gameboard extends HighScore {
         }
 
     }
-    
+
     //inicia spawnando blocos 1024 , 1024
-     private void startEasterEgg() {
+    private void startEasterEgg() {
         for (int i = 0; i < startingTile; i++) {
             spawnRandomTile(1024, 1024);
         }
@@ -214,6 +207,7 @@ public class Gameboard extends HighScore {
         board[row][col] = new Tile(value, getTileX(col), getTileY(row));
 
     }
+
     //========================================================================//
     //Arruma a velocidade para nao atrapalhar/bugar a animação de movimentacao
     private void resetPosition(Tile current, int row, int col) {
@@ -309,59 +303,20 @@ public class Gameboard extends HighScore {
 
     //========================================================================//
     //Move as peças do jogo
-    private void moveTiles(Direction dir) {
+    private void moveLeft() {
         boolean canMove = false;
         int horizontalDirection = 0;
         int verticalDirection = 0;
-
-        if (dir == Direction.LEFT) {
-            horizontalDirection = -1;
-            for (int row = 0; row < ROWS; row++) {
-                for (int col = 0; col < COLUMNS; col++) {
-                    if (!canMove) {
-                        canMove = move(row, col, horizontalDirection, verticalDirection, dir);
-                    } else {
-                        move(row, col, horizontalDirection, verticalDirection, dir);
-                    }
+        horizontalDirection = -1;
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                if (!canMove) {
+                    canMove = move(row, col, horizontalDirection, verticalDirection,Direction.LEFT);
+                } else {
+                    move(row, col, horizontalDirection, verticalDirection,Direction.LEFT);
                 }
             }
-        } else if (dir == Direction.RIGHT) {
-            horizontalDirection = +1;
-            for (int row = 0; row < ROWS; row++) {
-                for (int col = COLUMNS - 1; col >= 0; col--) {
-                    if (!canMove) {
-                        canMove = move(row, col, horizontalDirection, verticalDirection, dir);
-                    } else {
-                        move(row, col, horizontalDirection, verticalDirection, dir);
-                    }
-                }
-            }
-        } else if (dir == Direction.UP) {
-            verticalDirection = -1;
-            for (int row = 0; row < ROWS; row++) {
-                for (int col = 0; col < COLUMNS; col++) {
-                    if (!canMove) {
-                        canMove = move(row, col, horizontalDirection, verticalDirection, dir);
-                    } else {
-                        move(row, col, horizontalDirection, verticalDirection, dir);
-                    }
-                }
-            }
-        } else if (dir == Direction.DOWN) {
-            verticalDirection = 1;
-            for (int row = ROWS - 1; row >= 0; row--) {
-                for (int col = 0; col < COLUMNS; col++) {
-                    if (!canMove) {
-                        canMove = move(row, col, horizontalDirection, verticalDirection, dir);
-                    } else {
-                        move(row, col, horizontalDirection, verticalDirection, dir);
-                    }
-                }
-            }
-        } else {
-            System.out.println(dir + "is not a valid direction.");
         }
-
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 Tile current = board[row][col];
@@ -376,9 +331,97 @@ public class Gameboard extends HighScore {
             checkDead();
             checkWin();     //Ver com o Dalton se necessario
         }
-
     }
-
+    
+    private void moveRight(){
+        boolean canMove = false;
+        int horizontalDirection = 0;
+        int verticalDirection = 0;
+        horizontalDirection = +1;
+            for (int row = 0; row < ROWS; row++) {
+                for (int col = COLUMNS - 1; col >= 0; col--) {
+                    if (!canMove) {
+                        canMove = move(row, col, horizontalDirection, verticalDirection, Direction.RIGHT);
+                    } else {
+                        move(row, col, horizontalDirection, verticalDirection, Direction.RIGHT);
+                    }
+                }
+            }
+            for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                Tile current = board[row][col];
+                if (current == null) {
+                    continue;
+                }
+                current.setCanCombine(true);
+            }
+        }
+            if (canMove) {
+            spawnRandomTile(2, 4);
+            checkDead();
+            checkWin();     //Ver com o Dalton se necessario
+        }
+    }
+    
+    private void moveUp(){
+         boolean canMove = false;
+        int horizontalDirection = 0;
+        int verticalDirection = 0;
+        verticalDirection = -1;
+            for (int row = 0; row < ROWS; row++) {
+                for (int col = 0; col < COLUMNS; col++) {
+                    if (!canMove) {
+                        canMove = move(row, col, horizontalDirection, verticalDirection, Direction.UP);
+                    } else {
+                        move(row, col, horizontalDirection, verticalDirection, Direction.UP);
+                    }
+                }
+            }
+            for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                Tile current = board[row][col];
+                if (current == null) {
+                    continue;
+                }
+                current.setCanCombine(true);
+            }
+        }
+            if (canMove) {
+            spawnRandomTile(2, 4);
+            checkDead();
+            checkWin();     //Ver com o Dalton se necessario
+        }
+    }
+    
+    private void moveDown(){
+        boolean canMove = false;
+        int horizontalDirection = 0;
+        int verticalDirection = 0;
+        verticalDirection = 1;
+            for (int row = ROWS - 1; row >= 0; row--) {
+                for (int col = 0; col < COLUMNS; col++) {
+                    if (!canMove) {
+                        canMove = move(row, col, horizontalDirection, verticalDirection, Direction.DOWN);
+                    } else {
+                        move(row, col, horizontalDirection, verticalDirection, Direction.DOWN);
+                    }
+                }
+            }
+            for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                Tile current = board[row][col];
+                if (current == null) {
+                    continue;
+                }
+                current.setCanCombine(true);
+            }
+        }
+            if (canMove) {
+            spawnRandomTile(2, 4);
+            checkDead();
+            checkWin();     //Ver com o Dalton se necessario
+        }
+    }
     //========================================================================//
     /*
      Checa fim do jogo, percorre todas as peças checando a combinação nos arredores
@@ -406,9 +449,9 @@ public class Gameboard extends HighScore {
     //========================================================================//
     //Checa se houve vitoria
     public boolean checkWin() {
-        if(winGame){
+        if (winGame) {
             return winGame;
-        }            
+        }
         return false;
     }
 
@@ -457,64 +500,65 @@ public class Gameboard extends HighScore {
     //========================================================================//
     //Checa qual tecla foi pressionada para mover a peça
     private void checkTypedKeys() {
-        if(!winGame){       //se o jogo for ganho nao permite o jogardor mover a peças
-        //LEFT
-        if (KeyboardInput.typed(KeyEvent.VK_LEFT)) {
-            moveTiles(Direction.LEFT);
-            if (!gameStarted) {
-                gameStarted = true;
+        if (!winGame) {       //se o jogo for ganho nao permite o jogardor mover a peças
+            //LEFT
+            if (KeyboardInput.typed(KeyEvent.VK_LEFT)) {
+                moveLeft();
+                if (!gameStarted) {
+                    gameStarted = true;
+                }
             }
-        }
-        if (KeyboardInput.typed(KeyEvent.VK_A)) {
-            moveTiles(Direction.LEFT);
-            if (!gameStarted) {
-                gameStarted = true;
+            if (KeyboardInput.typed(KeyEvent.VK_A)) {
+                moveLeft();
+                if (!gameStarted) {
+                    gameStarted = true;
+                }
             }
-        }
 
-        //RIGHT
-        if (KeyboardInput.typed(KeyEvent.VK_RIGHT)) {
-            moveTiles(Direction.RIGHT);
-            if (!gameStarted) {
-                gameStarted = true;
+            //RIGHT
+            if (KeyboardInput.typed(KeyEvent.VK_RIGHT)) {
+                moveRight();
+                if (!gameStarted) {
+                    gameStarted = true;
+                }
             }
-        }
-        if (KeyboardInput.typed(KeyEvent.VK_D)) {
-            moveTiles(Direction.RIGHT);
-            if (!gameStarted) {
-                gameStarted = true;
+            if (KeyboardInput.typed(KeyEvent.VK_D)) {
+                moveRight();
+                if (!gameStarted) {
+                    gameStarted = true;
+                }
             }
-        }
 
-        //UP
-        if (KeyboardInput.typed(KeyEvent.VK_UP)) {
-            moveTiles(Direction.UP);
-            if (!gameStarted) {
-                gameStarted = true;
+            //UP
+            if (KeyboardInput.typed(KeyEvent.VK_UP)) {
+                moveUp();
+                if (!gameStarted) {
+                    gameStarted = true;
+                }
             }
-        }
-        if (KeyboardInput.typed(KeyEvent.VK_W)) {
-            moveTiles(Direction.UP);
-            if (!gameStarted) {
-                gameStarted = true;
+            if (KeyboardInput.typed(KeyEvent.VK_W)) {
+                moveUp();
+                if (!gameStarted) {
+                    gameStarted = true;
+                }
             }
-        }
 
-        //DOWN
-        if (KeyboardInput.typed(KeyEvent.VK_DOWN)) {
-            moveTiles(Direction.DOWN);
-            if (!gameStarted) {
-                gameStarted = true;
+            //DOWN
+            if (KeyboardInput.typed(KeyEvent.VK_DOWN)) {
+                moveDown();
+                if (!gameStarted) {
+                    gameStarted = true;
+                }
             }
-        }
-        if (KeyboardInput.typed(KeyEvent.VK_S)) {
-            moveTiles(Direction.DOWN);
-            if (!gameStarted) {
-                gameStarted = true;
+            if (KeyboardInput.typed(KeyEvent.VK_S)) {
+                moveDown();
+                if (!gameStarted) {
+                    gameStarted = true;
+                }
             }
         }
     }
- }
+
     //========================GETTERS e SETTERS===============================//
     public int getTileX(int col) {
         return SPACING + col * Tile.WIDTH + col * SPACING;
