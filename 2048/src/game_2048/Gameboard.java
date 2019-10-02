@@ -7,14 +7,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Random;
-import javax.swing.*;
 
 //========================================================================//
 public class Gameboard extends HighScore {
 
-    public enum Direction {
-        LEFT, RIGHT, UP, DOWN
-    }
+    public static final String LEFT = "LEFT";
+    public static final String RIGHT = "RIGHT";
+    public static final String UP = "UP";
+    public static final String DOWN = "DOWN";
 
     //Board será 4x4
     public static final int ROWS = 4;
@@ -55,7 +55,7 @@ public class Gameboard extends HighScore {
     private MouseEvent e;
 
     //========================================================================//
-    public Gameboard(int x, int y) {       
+    public Gameboard(int x, int y) {
         scoreFont = Game.main.deriveFont(30f);
 
         this.x = x;
@@ -243,7 +243,7 @@ public class Gameboard extends HighScore {
 
     //========================================================================//
     //Checa se é possivel mover as peças
-    private boolean move(int row, int col, int horizontalDirection, int verticalDirection, Direction dir) {
+    private boolean move(int row, int col, int horizontalDirection, int verticalDirection, String dir) {
         boolean canMove = false;
 
         Tile current = board[row][col];
@@ -288,14 +288,14 @@ public class Gameboard extends HighScore {
 
     //========================================================================//
     //Checa limite do board
-    private boolean outOfBounds(Direction dir, int row, int col) {
-        if (dir == Direction.LEFT) {
+    private boolean outOfBounds(String dir, int row, int col) {
+        if (dir == LEFT) {
             return col < 0;
-        } else if (dir == Direction.RIGHT) {
+        } else if (dir == RIGHT) {
             return col > COLUMNS - 1;
-        } else if (dir == Direction.UP) {
+        } else if (dir == UP) {
             return row < 0;
-        } else if (dir == Direction.DOWN) {
+        } else if (dir == DOWN) {
             return row > ROWS - 1;
         }
         return false;
@@ -311,9 +311,9 @@ public class Gameboard extends HighScore {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 if (!canMove) {
-                    canMove = move(row, col, horizontalDirection, verticalDirection,Direction.LEFT);
+                    canMove = move(row, col, horizontalDirection, verticalDirection, LEFT);
                 } else {
-                    move(row, col, horizontalDirection, verticalDirection,Direction.LEFT);
+                    move(row, col, horizontalDirection, verticalDirection, LEFT);
                 }
             }
         }
@@ -329,25 +329,25 @@ public class Gameboard extends HighScore {
         if (canMove) {
             spawnRandomTile(2, 4);
             checkDead();
-            checkWin();     //Ver com o Dalton se necessario
+            checkWin();
         }
     }
-    
-    private void moveRight(){
+
+    private void moveRight() {
         boolean canMove = false;
         int horizontalDirection = 0;
         int verticalDirection = 0;
         horizontalDirection = +1;
-            for (int row = 0; row < ROWS; row++) {
-                for (int col = COLUMNS - 1; col >= 0; col--) {
-                    if (!canMove) {
-                        canMove = move(row, col, horizontalDirection, verticalDirection, Direction.RIGHT);
-                    } else {
-                        move(row, col, horizontalDirection, verticalDirection, Direction.RIGHT);
-                    }
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = COLUMNS - 1; col >= 0; col--) {
+                if (!canMove) {
+                    canMove = move(row, col, horizontalDirection, verticalDirection, RIGHT);
+                } else {
+                    move(row, col, horizontalDirection, verticalDirection, RIGHT);
                 }
             }
-            for (int row = 0; row < ROWS; row++) {
+        }
+        for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 Tile current = board[row][col];
                 if (current == null) {
@@ -356,28 +356,28 @@ public class Gameboard extends HighScore {
                 current.setCanCombine(true);
             }
         }
-            if (canMove) {
+        if (canMove) {
             spawnRandomTile(2, 4);
             checkDead();
-            checkWin();     //Ver com o Dalton se necessario
+            checkWin();
         }
     }
-    
-    private void moveUp(){
-         boolean canMove = false;
+
+    private void moveUp() {
+        boolean canMove = false;
         int horizontalDirection = 0;
         int verticalDirection = 0;
         verticalDirection = -1;
-            for (int row = 0; row < ROWS; row++) {
-                for (int col = 0; col < COLUMNS; col++) {
-                    if (!canMove) {
-                        canMove = move(row, col, horizontalDirection, verticalDirection, Direction.UP);
-                    } else {
-                        move(row, col, horizontalDirection, verticalDirection, Direction.UP);
-                    }
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                if (!canMove) {
+                    canMove = move(row, col, horizontalDirection, verticalDirection, UP);
+                } else {
+                    move(row, col, horizontalDirection, verticalDirection, UP);
                 }
             }
-            for (int row = 0; row < ROWS; row++) {
+        }
+        for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 Tile current = board[row][col];
                 if (current == null) {
@@ -386,28 +386,28 @@ public class Gameboard extends HighScore {
                 current.setCanCombine(true);
             }
         }
-            if (canMove) {
+        if (canMove) {
             spawnRandomTile(2, 4);
             checkDead();
-            checkWin();     //Ver com o Dalton se necessario
+            checkWin();
         }
     }
-    
-    private void moveDown(){
+
+    private void moveDown() {
         boolean canMove = false;
         int horizontalDirection = 0;
         int verticalDirection = 0;
         verticalDirection = 1;
-            for (int row = ROWS - 1; row >= 0; row--) {
-                for (int col = 0; col < COLUMNS; col++) {
-                    if (!canMove) {
-                        canMove = move(row, col, horizontalDirection, verticalDirection, Direction.DOWN);
-                    } else {
-                        move(row, col, horizontalDirection, verticalDirection, Direction.DOWN);
-                    }
+        for (int row = ROWS - 1; row >= 0; row--) {
+            for (int col = 0; col < COLUMNS; col++) {
+                if (!canMove) {
+                    canMove = move(row, col, horizontalDirection, verticalDirection, DOWN);
+                } else {
+                    move(row, col, horizontalDirection, verticalDirection, DOWN);
                 }
             }
-            for (int row = 0; row < ROWS; row++) {
+        }
+        for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 Tile current = board[row][col];
                 if (current == null) {
@@ -416,12 +416,13 @@ public class Gameboard extends HighScore {
                 current.setCanCombine(true);
             }
         }
-            if (canMove) {
+        if (canMove) {
             spawnRandomTile(2, 4);
             checkDead();
-            checkWin();     //Ver com o Dalton se necessario
+            checkWin();
         }
     }
+
     //========================================================================//
     /*
      Checa fim do jogo, percorre todas as peças checando a combinação nos arredores
