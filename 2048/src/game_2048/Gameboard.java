@@ -73,7 +73,10 @@ public class Gameboard extends HighScore {
     //========================================================================//
     //funcao que checa updates, seja de teclas pressionadas, um novo highscore, ou se houve vitoria
     public void update() {
-        checkTypedKeys();
+        typedKeysLeft();
+        typedKeysRight();
+        typedKeysUp();
+        typedKeysDown();
 
         if (currentScore >= highScore) {
             highScore = currentScore;
@@ -498,58 +501,69 @@ public class Gameboard extends HighScore {
 
     //========================================================================//
     //Checa qual tecla foi pressionada para mover a peça
-    private void checkTypedKeys() {
+    private void typedKeysLeft() {
         if (!winGame) {       //se o jogo for ganho nao permite o jogardor mover a peças
-            //LEFT
-            if (KeyboardInput.typed(KeyEvent.VK_LEFT)) {
+            if (KeyboardInput.keyTyped(KeyEvent.VK_LEFT)) {
                 moveLeft();
                 if (!gameStarted) {
                     gameStarted = true;
                 }
             }
-            if (KeyboardInput.typed(KeyEvent.VK_A)) {
+            if (KeyboardInput.keyTyped(KeyEvent.VK_A)) {
                 moveLeft();
                 if (!gameStarted) {
                     gameStarted = true;
                 }
             }
+        }
+    }
 
-            //RIGHT
-            if (KeyboardInput.typed(KeyEvent.VK_RIGHT)) {
+    private void typedKeysRight() {
+        if (!winGame) {
+            if (KeyboardInput.keyTyped(KeyEvent.VK_RIGHT)) {
                 moveRight();
                 if (!gameStarted) {
                     gameStarted = true;
                 }
             }
-            if (KeyboardInput.typed(KeyEvent.VK_D)) {
+
+            if (KeyboardInput.keyTyped(KeyEvent.VK_D)) {
                 moveRight();
                 if (!gameStarted) {
                     gameStarted = true;
                 }
             }
+        }
+    }
 
-            //UP
-            if (KeyboardInput.typed(KeyEvent.VK_UP)) {
-                moveUp();
-                if (!gameStarted) {
-                    gameStarted = true;
-                }
-            }
-            if (KeyboardInput.typed(KeyEvent.VK_W)) {
+    private void typedKeysUp() {
+        if (!winGame) {
+            if (KeyboardInput.keyTyped(KeyEvent.VK_UP)) {
                 moveUp();
                 if (!gameStarted) {
                     gameStarted = true;
                 }
             }
 
-            //DOWN
-            if (KeyboardInput.typed(KeyEvent.VK_DOWN)) {
+            if (KeyboardInput.keyTyped(KeyEvent.VK_W)) {
+                moveUp();
+                if (!gameStarted) {
+                    gameStarted = true;
+                }
+            }
+        }
+    }
+
+    private void typedKeysDown() {
+        if (!winGame) {
+            if (KeyboardInput.keyTyped(KeyEvent.VK_DOWN)) {
                 moveDown();
                 if (!gameStarted) {
                     gameStarted = true;
                 }
             }
-            if (KeyboardInput.typed(KeyEvent.VK_S)) {
+
+            if (KeyboardInput.keyTyped(KeyEvent.VK_S)) {
                 moveDown();
                 if (!gameStarted) {
                     gameStarted = true;

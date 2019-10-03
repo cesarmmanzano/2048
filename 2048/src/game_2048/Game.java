@@ -3,7 +3,6 @@ package game_2048;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import static java.awt.Font.ITALIC;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -23,7 +22,7 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     public static final int HEIGHT = 560;
 
     //Fonte usada
-    public static final Font main = new Font("Algerian", ITALIC, 28);
+    public static final Font main = new Font("Algerian", Font.PLAIN, 28);
 
     //Para que as atualizações/desenhos sejam feitos ao mesmo tempo do que o gui e swing
     private Thread game;
@@ -57,22 +56,21 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     }
 
     //========================================================================//
-    private void update() {
+    private void update() { //will be callde 60times/seg
         screen.update();
         KeyboardInput.update();
     }
 
     //========================================================================//
-    private void draw() {
-        Graphics2D g = (Graphics2D) image.getGraphics();
+    private void draw() { 
+        Graphics2D g = (Graphics2D) image.getGraphics();    //local onde vamos fazer os desenhos
         background = new Color(0xDCDCDC);
         g.setColor(background);
         g.fillRect(0, 0, WIDTH, HEIGHT);
         screen.draw(g);
 
-        g.dispose();
+        g.dispose();    //libera os recursos dos sistema relacionados a janela
 
-        //JPanel graphics - mostra no JPanel
         Graphics2D g2d = (Graphics2D) getGraphics();
         g2d.drawImage(image, 0, 0, null);
         g.dispose();
@@ -80,27 +78,29 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     }
 
     //========================================================================//
+
     @Override
     public void run() {
         int fps = 0, updates = 0;
         long fpsTimer = System.currentTimeMillis();
-        double nsPerUpdate = 1000000000.0 / 60;
+        double nsPerUpdate = 1000000000.0 / 60; //keep track of how many nanosec in betwen updates 
 
         //Ultimo update em nanoseg
         double then = System.nanoTime();
 
-        //Updates necessários - caso der erro em render()
+        //Updates necessários - caso der erro em draw()/renderização
         double unprocessed = 0;
 
+        //enquanto estiver rodando
         while (running) {
 
             boolean shouldRender = false;
 
-            double now = System.nanoTime();
-            unprocessed = unprocessed + (now - then) / nsPerUpdate;
+            double now = System.nanoTime(); //tempo atual
+            unprocessed = unprocessed + (now - then) / nsPerUpdate; //isso ira contar a quantidade de updates necessarios baseado em quanto tempo passou
             then = now;
 
-            while (unprocessed >= 1) {
+            while (unprocessed >= 1) {  //enquanto houver o que processar
                 updates++;
                 update();
                 unprocessed--;
@@ -108,11 +108,11 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
 
             }
 
-            if (shouldRender) {
+            if (shouldRender) { //se precisa renderizar/desenhar
                 fps++;
                 draw();
                 shouldRender = false;
-            } else {
+            } else {    //if you are not rendering sleep the thread
                 try {
                     Thread.sleep(1); //Sleep thread -> shouldRender = false
                 } catch (Exception e) {
@@ -121,8 +121,10 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
             }
         }
 
-        //FPS Timer
+        //FPS Timer, debug e reset de variaveis caso o tempo atual menos quanto tempo que passou for maior que um segundo 
         if (System.currentTimeMillis() - fpsTimer > 1000) {
+            System.out.printf("%d fps %d updates", fps, updates);
+            System.out.println();
             fps = 0;
             updates = 0;
             fpsTimer += 1000;
