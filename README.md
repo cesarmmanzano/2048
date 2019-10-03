@@ -1,7 +1,7 @@
 # 2048
-[Cesar Marrote Manzano] (https://github.com/cesarmmanzano)
+[Cesar Marrote Manzano](https://github.com/cesarmmanzano)
 <br>
-[Matheus Henrique Moretti] (https://github.com/MatheusMoretti)
+[Matheus Henrique Moretti](https://github.com/MatheusMoretti)
 <br>
 O Jogo foi desenvolvido na IDE NetBeans 8.2
 <br><br>
