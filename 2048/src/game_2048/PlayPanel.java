@@ -114,7 +114,7 @@ public class PlayPanel extends Panel {
         g.setColor(new Color(222, 222, 222, opacity));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
         g.setColor(Color.red);
-        g.drawString("FIM DE JOGO", Game.WIDTH / 2 - MessageSize.getMessageWidth("FIM DE JOGO", gameOverFont, g) / 2, 250);
+        g.drawString("FIM DE JOGO", Game.WIDTH / 2 - MessageSize.getStringWidth("FIM DE JOGO", gameOverFont, g) / 2, 250);
     }
 
     //========================================================================//
@@ -122,8 +122,8 @@ public class PlayPanel extends Panel {
     public void drawGameWin(Graphics2D g) {
         g.setColor(new Color(222, 222, 222, opacity));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
-        g.setColor(Color.red);
-        g.drawString("VITORIA", Game.WIDTH / 2 - MessageSize.getMessageWidth("VITORIA", gameOverFont, g) / 2, 250);
+        g.setColor(Color.green);
+        g.drawString("VITORIA", Game.WIDTH / 2 - MessageSize.getStringWidth("VITORIA", gameOverFont, g) / 2, 250);
     }
 
     //========================================================================//

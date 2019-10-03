@@ -63,6 +63,6 @@ public class MenuPanel extends Panel {
         super.draw(g);
         g.setFont(titleFont);
         g.setColor(titleColor);
-        g.drawString(title, game.WIDTH / 2 - MessageSize.getMessageWidth(title, titleFont, g) / 2, 125);
+        g.drawString(title, game.WIDTH / 2 - MessageSize.getStringWidth(title, titleFont, g) / 2, 125);
     }
 }

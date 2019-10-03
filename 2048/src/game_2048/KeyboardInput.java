@@ -1,7 +1,6 @@
 package game_2048;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 
 public class KeyboardInput {
 
@@ -61,9 +60,5 @@ public class KeyboardInput {
 
     public static boolean keyTyped(int keyEvent) {
         return !pressed[keyEvent] && previous[keyEvent];
-    }
-    
-    public static boolean mouseClicked(int mouseEvent) {
-        return !pressed[mouseEvent] && previous[mouseEvent];
     }
 }

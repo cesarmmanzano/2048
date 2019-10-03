@@ -54,7 +54,7 @@ public class Button {
 
         g.setColor(Color.white);
         g.setFont(font);
-        g.drawString(text, clickBox.x + clickBox.width / 2 - MessageSize.getMessageWidth(text, font, g) / 2, clickBox.y + clickBox.height / 2 + MessageSize.getMessageHeight(text, font, g) / 2);
+        g.drawString(text, clickBox.x + clickBox.width / 2 - MessageSize.getStringWidth(text, font, g) / 2, clickBox.y + clickBox.height / 2 + MessageSize.getStringHeight(text, font, g) / 2);
     }
 
     public void addActionListener(ActionListener listener) {

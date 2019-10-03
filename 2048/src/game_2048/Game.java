@@ -3,6 +3,7 @@ package game_2048;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import static java.awt.Font.ITALIC;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -22,7 +23,7 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     public static final int HEIGHT = 560;
 
     //Fonte usada
-    public static final Font main = new Font("Algerian", Font.PLAIN, 28);
+    public static final Font main = new Font("Algerian", ITALIC, 30);
 
     //Para que as atualizações/desenhos sejam feitos ao mesmo tempo do que o gui e swing
     private Thread game;
@@ -81,38 +82,37 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
 
     @Override
     public void run() {
-        int fps = 0, updates = 0;
-        long fpsTimer = System.currentTimeMillis();
-        double nsPerUpdate = 1000000000.0 / 60; //keep track of how many nanosec in betwen updates 
-
-        //Ultimo update em nanoseg
-        double then = System.nanoTime();
+        int fpsControl = 0, updates = 0;
+        long fpsTemp = System.currentTimeMillis();
+        double fps = 1000000000.0 / 70; //acompanha quantos nanos segundos tem entre updates
+        
+        //Tempo do ultimo update, em nanoseg
+        double previousTemp = System.nanoTime();
 
         //Updates necessários - caso der erro em draw()/renderização
-        double unprocessed = 0;
+        double notProcessed = 0;
 
         //enquanto estiver rodando
-        while (running) {
+        while (running){
 
-            boolean shouldRender = false;
+            boolean deveRenderizar = false;
 
-            double now = System.nanoTime(); //tempo atual
-            unprocessed = unprocessed + (now - then) / nsPerUpdate; //isso ira contar a quantidade de updates necessarios baseado em quanto tempo passou
-            then = now;
+            double actualTemp = System.nanoTime(); //tempo atual
+            notProcessed = notProcessed + (actualTemp - previousTemp) / fps; //gera a quantidade de updates necessarios baseado em quanto tempo passou
+            previousTemp = actualTemp;
 
-            while (unprocessed >= 1) {  //enquanto houver o que processar
+            while (notProcessed >= 1) {  //enquanto houver o que processar
                 updates++;
                 update();
-                unprocessed--;
-                shouldRender = true;
-
+                notProcessed--;
+                deveRenderizar = true;
             }
 
-            if (shouldRender) { //se precisa renderizar/desenhar
-                fps++;
+            if (deveRenderizar) { //se precisa renderizar/desenhar
+                fpsControl++;
                 draw();
-                shouldRender = false;
-            } else {    //if you are not rendering sleep the thread
+                deveRenderizar = false;
+            } else {    //Se nao esta renderizando
                 try {
                     Thread.sleep(1); //Sleep thread -> shouldRender = false
                 } catch (Exception e) {
@@ -121,13 +121,11 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
             }
         }
 
-        //FPS Timer, debug e reset de variaveis caso o tempo atual menos quanto tempo que passou for maior que um segundo 
-        if (System.currentTimeMillis() - fpsTimer > 1000) {
-            System.out.printf("%d fps %d updates", fps, updates);
-            System.out.println();
-            fps = 0;
+        //FPS Timer, debug e reset de variaveis caso o tempo atual menos quanto tempo se passou for maior que um segundo 
+        if (System.currentTimeMillis() - fpsTemp > 1000) {  
+            fpsControl = 0;
             updates = 0;
-            fpsTimer += 1000;
+            fpsTemp = fpsTemp + 1000;
         }
     }
 

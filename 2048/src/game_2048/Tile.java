@@ -35,7 +35,7 @@ public class Tile {
     private int y;
 
     //Para animações
-    private boolean startAnimation = true;
+    private boolean beginAnimation = true;
     private double renderSpeed = 0.1; //Velocidade da animação
     private BufferedImage startImage;
     private boolean combineAnimation = false;
@@ -69,7 +69,7 @@ public class Tile {
 
     //============================ANIMATION===================================//
     public void animation() {
-        if (startAnimation) {
+        if (beginAnimation) {
             AffineTransform transform = new AffineTransform();
             transform.translate(WIDTH / 2 - renderSpeed * WIDTH / 2, HEIGHT / 2 - renderSpeed * HEIGHT / 2);
             transform.scale(renderSpeed, renderSpeed);
@@ -81,8 +81,8 @@ public class Tile {
             renderSpeed = renderSpeed + 0.1;
             g2d.dispose();
 
-            if (renderSpeed >= 2) {
-                startAnimation = false;
+            if (renderSpeed >= 1.5) {
+                beginAnimation = false;
             }
         } else if (combineAnimation) {
             AffineTransform transform = new AffineTransform();
@@ -93,10 +93,10 @@ public class Tile {
             g2d.setColor(new Color(0, 0, 0, 0));
             g2d.fillRect(0, 0, WIDTH, HEIGHT);
             g2d.drawImage(tileImage, transform, null);
-            inicialSize = inicialSize + 0.1;
+            inicialSize = inicialSize + 0.08;
             g2d.dispose();
 
-            if (inicialSize >= 1) {
+            if (inicialSize >= 1.3) {
                 combineAnimation = false;
             }
         }
@@ -104,7 +104,7 @@ public class Tile {
 
     //============================DRAW========================================//
     public void draw(Graphics2D g) {
-        if (startAnimation) {
+        if (beginAnimation) {
             g.drawImage(startImage, x, y, null);
         } else if (combineAnimation) {
             g.drawImage(combineImage, (int) (x + WIDTH / 2 - inicialSize * WIDTH / 2), (int) (y + HEIGHT / 2 - inicialSize * HEIGHT / 2), null);
@@ -179,8 +179,8 @@ public class Tile {
         g.setFont(tileFont);
 
         //Centralizando texto
-        int drawX = WIDTH / 2 - MessageSize.getMessageWidth("" + tileValue, tileFont, g) / 2;
-        int drawY = HEIGHT / 2 + MessageSize.getMessageHeight("" + tileValue, tileFont, g) / 2;
+        int drawX = WIDTH / 2 - MessageSize.getStringWidth("" + tileValue, tileFont, g) / 2;
+        int drawY = HEIGHT / 2 + MessageSize.getStringHeight("" + tileValue, tileFont, g) / 2;
         g.drawString("" + tileValue, drawX, drawY);
         g.dispose();
 
