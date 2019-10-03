@@ -7,7 +7,7 @@ Sobre o jogo:
 - Movimentação com as setas ou com WASD;
 - Quando dois valores de numeros iguais se encontram, eles viram um só, com a soma dos valores;
 - Você ganha quando conseguir um bloco com valor de 2048.
-<br><br>
+
 Detalhes de projeto:
 - Animação para as junções;
 - "Easter Egg" para completar o jogo;
