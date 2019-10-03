@@ -5,6 +5,8 @@
 <br>
 O Jogo foi desenvolvido na IDE NetBeans 8.2
 <br><br>
+![2048](https://user-images.githubusercontent.com/43895268/66124286-5e488700-e5ba-11e9-8abd-c4cd389f634f.gif)
+<br><br>
 Sobre o jogo:
 - Movimentação com as setas ou com WASD;
 - Quando dois valores de numeros iguais se encontram, eles viram um só, com a soma dos valores;
