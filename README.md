@@ -1,7 +1,9 @@
 # 2048
-Cesar Marrote Manzano
+[Cesar Marrote Manzano] (https://github.com/cesarmmanzano)
 <br>
-Matheus Henrique Moretti
+[Matheus Henrique Moretti] (https://github.com/MatheusMoretti)
+<br>
+O Jogo foi desenvolvido na IDE NetBeans 8.2
 <br><br>
 Sobre o jogo:
 - Movimentação com as setas ou com WASD;
@@ -10,6 +12,6 @@ Sobre o jogo:
 
 Detalhes de projeto:
 - Animação para as junções;
-- "Easter Egg" para completar o jogo;
+- "Easter Egg" para completar o jogo (botão atrás do botão de novo jogo);
 - Existe um menu no qual o jogador pode escolher a opção desejada;
 - O jogo salva o recorde de pontuação.
