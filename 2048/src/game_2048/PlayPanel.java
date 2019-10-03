@@ -19,13 +19,12 @@ public class PlayPanel extends Panel {
     private Button menu;
     private Button newGame;
     private Button easterEgg;
+    private Button exit;
 
-    private int smallButtonWidth = 160;
-    private int spacing = 20;
-    private int largeButtonWidth = smallButtonWidth * 2 + spacing;
+    private int largeButtonWidth = 380;
     private int buttonHeight = 50;
     private boolean added;  //verificador para saber se ja foi adicionado a tela de vitoria/derreta
-    private int alpha = 0;  //eh a transparencia/opacidade
+    private int opacity = 0;  //eh a transparencia/opacidade
 
     private Font gameOverFont;
 
@@ -35,25 +34,31 @@ public class PlayPanel extends Panel {
         info = new BufferedImage(Game.WIDTH, 200, BufferedImage.TYPE_INT_RGB);
 
         //instancia dos botoes
-        menu = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 450, largeButtonWidth, buttonHeight);
-        playAgain = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 380, largeButtonWidth, buttonHeight);
+        menu = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 380, largeButtonWidth, buttonHeight);
+        playAgain = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 310, largeButtonWidth, buttonHeight);
+        exit = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 450, largeButtonWidth, buttonHeight);
+        
         newGame = new Button(Game.WIDTH / 2 - 130 / 2 + 150, 20, 130, buttonHeight);
         easterEgg = new Button(Game.WIDTH / 2 - 150 / 2 + 150, 20, 150, buttonHeight);
 
         //texto dos botoes
         menu.setText("Voltar para o Menu");
         playAgain.setText("Tentar Novamente");
+        exit.setText("Sair");
+        
         newGame.setText("Novo Jogo");
         easterEgg.setText("");
+        
 
         //Ações ao clicar sobre o botão de jogar novamente
         playAgain.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 board.resetBoard();
-                alpha = 0;
+                opacity = 0;
                 remove(playAgain);
                 remove(menu);
+                remove(exit);
                 add(easterEgg);
                 add(newGame);
                 added = false;
@@ -65,9 +70,10 @@ public class PlayPanel extends Panel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 board.resetBoard();
-                alpha = 0;
+                opacity = 0;
                 remove(playAgain);
                 remove(menu);
+                remove(exit);
                 add(easterEgg);
                 add(newGame);
                 added = false;
@@ -83,8 +89,8 @@ public class PlayPanel extends Panel {
             }
         });
         add(easterEgg);
-
-        //Ações ao clicar sobre o botão de iniciar novo jogo
+        
+        //Ações ao clicar sobre o botão de novo jogo
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -93,12 +99,19 @@ public class PlayPanel extends Panel {
         });
         add(newGame);
 
+        //Ações ao clicar sobre o botão de sair
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
     }
 
     //========================================================================//
     //Desenha a tela de derrota
     public void drawGameOver(Graphics2D g) {
-        g.setColor(new Color(222, 222, 222, alpha));
+        g.setColor(new Color(222, 222, 222, opacity));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
         g.setColor(Color.red);
         g.drawString("FIM DE JOGO", Game.WIDTH / 2 - MessageSize.getMessageWidth("FIM DE JOGO", gameOverFont, g) / 2, 250);
@@ -107,7 +120,7 @@ public class PlayPanel extends Panel {
     //========================================================================//
     //Desenha a tela de vitoria
     public void drawGameWin(Graphics2D g) {
-        g.setColor(new Color(222, 222, 222, alpha));
+        g.setColor(new Color(222, 222, 222, opacity));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
         g.setColor(Color.red);
         g.drawString("VITORIA", Game.WIDTH / 2 - MessageSize.getMessageWidth("VITORIA", gameOverFont, g) / 2, 250);
@@ -119,9 +132,9 @@ public class PlayPanel extends Panel {
     public void update() {
         board.update();
         if (board.checkDead()) {
-            alpha++;
-            if (alpha > 170) {
-                alpha = 170;
+            opacity++;
+            if (opacity > 170) {
+                opacity = 170;
             }
         }
     }
@@ -137,6 +150,7 @@ public class PlayPanel extends Panel {
                 added = true;
                 add(menu);
                 add(playAgain);
+                add(exit);
                 remove(newGame);
                 remove(easterEgg);
             }
@@ -146,6 +160,7 @@ public class PlayPanel extends Panel {
                 added = true;
                 add(menu);
                 add(playAgain);
+                add(exit);
                 remove(newGame);
                 remove(easterEgg);
             }

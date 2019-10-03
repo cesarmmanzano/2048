@@ -452,6 +452,10 @@ public class Gameboard extends HighScore {
     //Checa se houve vitoria
     public boolean checkWin() {
         if (winGame) {
+            if (currentScore >= highScore) {
+                highScore = currentScore;
+            }
+            setScore();
             return winGame;
         }
         return false;

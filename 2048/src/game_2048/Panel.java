@@ -2,15 +2,15 @@ package game_2048;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Panel {
 
-    private ArrayList<Button> buttons;
+    private LinkedList<Button> buttons;
 
     //========================================================================//
     public Panel() {
-        buttons = new ArrayList<Button>();
+        buttons = new LinkedList<Button>();
     }
 
     //========================================================================//
