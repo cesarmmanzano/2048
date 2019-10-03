@@ -1,17 +1,18 @@
 package game_2048;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
-public class Keyboard {
+public class KeyboardInput {
 
-    //Classe checa quais teclas foram clicadas
     public static boolean[] pressed = new boolean[256];
     public static boolean[] previous = new boolean[256];
 
-    private Keyboard() {
+    private KeyboardInput() {
     }
 
     //========================================================================//
+    //Sempre que chamado, essa classe atualizara os estados de cada tecla do jogo usada
     public static void update() {
         for (int i = 0; i < 8; i++) {
             //Setas
@@ -44,6 +45,7 @@ public class Keyboard {
                 case 7:
                     previous[KeyEvent.VK_S] = pressed[KeyEvent.VK_S];
                     break;
+
             }
         }
     }
@@ -57,7 +59,11 @@ public class Keyboard {
         pressed[e.getKeyCode()] = false;
     }
 
-    public static boolean typed(int keyEvent) {
+    public static boolean keyTyped(int keyEvent) {
         return !pressed[keyEvent] && previous[keyEvent];
+    }
+    
+    public static boolean mouseClicked(int mouseEvent) {
+        return !pressed[mouseEvent] && previous[mouseEvent];
     }
 }

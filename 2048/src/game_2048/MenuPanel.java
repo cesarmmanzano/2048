@@ -7,29 +7,30 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GUIMainMenuPanel extends GUIPanel {
+public class MenuPanel extends Panel {
 
     private Font titleFont = Game.main.deriveFont(80f);
     public String title = "2048";
-    private int buttonWidth = 150;
-    private int buttonHeight = 60;
     private Game game;
 
     private Color titleColor = new Color(0x4B0082);
 
-    public GUIMainMenuPanel() {
+    public MenuPanel() {
         super();
-        GUIButton playButton = new GUIButton(Game.WIDTH / 2 - buttonWidth / 2, 220, buttonWidth, buttonHeight);
+        //instancia dos botoes do menu, suas açoes, e texto
+        //botao para jogar
+        Button playButton = new Button(game.WIDTH / 2 - 150 / 2 - 100, 220, 150, 60);
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GUIScreen.getInstance().setCurrentPanel("Jogar");
+                Screen.getInstance().setCurrentPanel("Jogar");
             }
         });
         playButton.setText("Jogar");
         add(playButton);
 
-        GUIButton gitButton = new GUIButton(Game.WIDTH / 2 - buttonWidth / 2, 320, buttonWidth, buttonHeight);
+        //botao para o gitHub
+        Button gitButton = new Button(game.WIDTH / 2 - 150 / 2 + 100, 220, 150, 60);
         gitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,7 +45,8 @@ public class GUIMainMenuPanel extends GUIPanel {
         gitButton.setText("GitHub");
         add(gitButton);
 
-        GUIButton quitButton = new GUIButton(Game.WIDTH / 2 - buttonWidth / 2, 420, buttonWidth, buttonHeight);
+        //botao para sair
+        Button quitButton = new Button(game.WIDTH / 2 - 350 / 2, 320, 350, 60);
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -53,14 +55,14 @@ public class GUIMainMenuPanel extends GUIPanel {
         });
         quitButton.setText("Sair");
         add(quitButton);
-
     }
 
+    //Desenhar o que ha para desenhar de panel e o texto "2048"
     @Override
-    public void render(Graphics2D g) {
-        super.render(g);
+    public void draw(Graphics2D g) {
+        super.draw(g);
         g.setFont(titleFont);
         g.setColor(titleColor);
-        g.drawString(title, Game.WIDTH / 2 - DrawUtils.getMessageWidth(title, titleFont, g) / 2, 125);
+        g.drawString(title, game.WIDTH / 2 - MessageSize.getMessageWidth(title, titleFont, g) / 2, 125);
     }
 }

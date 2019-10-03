@@ -10,29 +10,36 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Game extends JPanel implements KeyListener, Runnable, MouseListener, MouseMotionListener {
 
-    //implements -> por conta da thread
     private static final long serialVersionUID = 1L;
 
     //Inicia variáveis de altura, largura e fonte
     public static final int WIDTH = 500;
     public static final int HEIGHT = 560;
+
+    //Fonte usada
     public static final Font main = new Font("Algerian", Font.PLAIN, 28);
 
+    //Para que as atualizações/desenhos sejam feitos ao mesmo tempo do que o gui e swing
     private Thread game;
-    private boolean running; //Checa se o jogo está rodando
+
+    //Checa se o jogo está rodando
+    private boolean running;
 
     //Usado para desenhar no JPanel
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
     private Color background;
-    private GUIScreen screen;
+    private Screen screen;
 
     //========================================================================//
     public Game() {
+
+        //Para poder usar o teclado
         setFocusable(true);
 
         //Determina tamanho do frame
@@ -42,29 +49,28 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        screen = GUIScreen.getInstance();
-        screen.add("Menu", new GUIMainMenuPanel());
+        screen = Screen.getInstance();
+        screen.add("Menu", new MenuPanel());
         screen.add("Jogar", new PlayPanel());
         screen.setCurrentPanel("Menu");
     }
 
     //========================================================================//
-    private void update() {
+    private void update() { //will be callde 60times/seg
         screen.update();
-        Keyboard.update();
+        KeyboardInput.update();
     }
 
     //========================================================================//
-    private void render() {
-        Graphics2D g = (Graphics2D) image.getGraphics();
+    private void draw() { 
+        Graphics2D g = (Graphics2D) image.getGraphics();    //local onde vamos fazer os desenhos
         background = new Color(0xDCDCDC);
         g.setColor(background);
-        g.fillRect(0, 0, WIDTH, HEIGHT); //"Clear screen" - tela branca no fundo
-        screen.render(g);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
+        screen.draw(g);
 
-        g.dispose();
+        g.dispose();    //libera os recursos dos sistema relacionados a janela
 
-        //JPanel graphics - mostra no JPanel
         Graphics2D g2d = (Graphics2D) getGraphics();
         g2d.drawImage(image, 0, 0, null);
         g.dispose();
@@ -72,27 +78,29 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     }
 
     //========================================================================//
+
     @Override
     public void run() {
         int fps = 0, updates = 0;
         long fpsTimer = System.currentTimeMillis();
-        double nsPerUpdate = 1000000000.0 / 60;
+        double nsPerUpdate = 1000000000.0 / 60; //keep track of how many nanosec in betwen updates 
 
         //Ultimo update em nanoseg
         double then = System.nanoTime();
 
-        //Updates necessários - caso der erro em render()
+        //Updates necessários - caso der erro em draw()/renderização
         double unprocessed = 0;
 
+        //enquanto estiver rodando
         while (running) {
 
             boolean shouldRender = false;
 
-            double now = System.nanoTime();
-            unprocessed = unprocessed + (now - then) / nsPerUpdate;
+            double now = System.nanoTime(); //tempo atual
+            unprocessed = unprocessed + (now - then) / nsPerUpdate; //isso ira contar a quantidade de updates necessarios baseado em quanto tempo passou
             then = now;
 
-            while (unprocessed >= 1) {
+            while (unprocessed >= 1) {  //enquanto houver o que processar
                 updates++;
                 update();
                 unprocessed--;
@@ -100,11 +108,11 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
 
             }
 
-            if (shouldRender) {
+            if (shouldRender) { //se precisa renderizar/desenhar
                 fps++;
-                render();
+                draw();
                 shouldRender = false;
-            } else {
+            } else {    //if you are not rendering sleep the thread
                 try {
                     Thread.sleep(1); //Sleep thread -> shouldRender = false
                 } catch (Exception e) {
@@ -113,7 +121,7 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
             }
         }
 
-        //FPS Timer
+        //FPS Timer, debug e reset de variaveis caso o tempo atual menos quanto tempo que passou for maior que um segundo 
         if (System.currentTimeMillis() - fpsTimer > 1000) {
             System.out.printf("%d fps %d updates", fps, updates);
             System.out.println();
@@ -147,17 +155,16 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
     //========================================================================//
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Keyboard.keyPressed(e);
+        KeyboardInput.keyPressed(e);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Keyboard.keyReleased(e);
+        KeyboardInput.keyReleased(e);
     }
 
     //========================================================================//
@@ -167,7 +174,6 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-        screen.mousePressed(e);
     }
 
     @Override
@@ -193,4 +199,25 @@ public class Game extends JPanel implements KeyListener, Runnable, MouseListener
         screen.mouseMoved(e);
 
     }
+
+    public static void main(String[] args) {
+        //Cria novo jogo
+        Game game2048 = new Game();
+
+        //Cria janela do JFrame
+        try {
+            JFrame newGame = new JFrame("2048"); //Cria janela
+            newGame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            newGame.setResizable(false);
+            newGame.add(game2048);
+            newGame.pack();
+            newGame.setLocationRelativeTo(null);
+            newGame.setVisible(true); //Deixa a janela visível
+        } catch (Exception e) {
+            System.out.println("Erro na abertura do JFrame");
+        }
+
+        game2048.start();   //Inicia o JOGO
+    }
+
 }

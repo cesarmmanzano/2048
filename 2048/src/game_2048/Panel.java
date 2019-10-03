@@ -2,61 +2,55 @@ package game_2048;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
-public class GUIPanel {
+public class Panel {
 
-    private ArrayList<GUIButton> buttons;
+    private LinkedList<Button> buttons;
 
     //========================================================================//
-    public GUIPanel() {
-        buttons = new ArrayList<GUIButton>();
+    public Panel() {
+        buttons = new LinkedList<Button>();
     }
 
     //========================================================================//
     public void update() {
-        for (GUIButton b : buttons) {
+        for (Button b : buttons) {
             b.update();
         }
     }
 
     //========================================================================//
-    public void render(Graphics2D g) {
-        for (GUIButton b : buttons) {
-            b.render(g);
+    public void draw(Graphics2D g) {
+        for (Button b : buttons) {
+            b.draw(g);
         }
     }
 
     //========================================================================//
-    public void add(GUIButton button) {
+    public void add(Button button) {
         buttons.add(button);
     }
 
-    public void remove(GUIButton button) {
+    public void remove(Button button) {
         buttons.remove(button);
     }
 
     //========================================================================//
-    public void mousePressed(MouseEvent e) {
-        for (GUIButton b : buttons) {
-            b.mousePressed(e);
-        }
-    }
-
     public void mouseReleased(MouseEvent e) {
-        for (GUIButton b : buttons) {
+        for (Button b : buttons) {
             b.mouseReleased(e);
         }
     }
 
     public void mouseDragged(MouseEvent e) {
-        for (GUIButton b : buttons) {
+        for (Button b : buttons) {
             b.mouseDragged(e);
         }
     }
 
     public void mouseMoved(MouseEvent e) {
-        for (GUIButton b : buttons) {
+        for (Button b : buttons) {
             b.mouseMoved(e);
         }
     }
