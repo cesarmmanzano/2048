@@ -17,3 +17,7 @@ O Jogo foi desenvolvido na IDE NetBeans 8.2
 - "Easter Egg" para completar o jogo (botão atrás do botão de novo jogo);
 - Existe um menu no qual o jogador pode escolher a opção desejada;
 - O jogo salva o recorde de pontuação.
+
+# Execução
+- Baixe o arquivo mais recente da área de release;
+- Abra o projeto na IDE recomendada, e execute o programa (atalho F6).
