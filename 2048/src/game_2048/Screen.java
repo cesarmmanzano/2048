@@ -6,7 +6,14 @@ import java.util.HashMap;
 
 public class Screen {
 
+    //A classe identificará em qual tela estamospar podermos fazer os links corretos
+    
     private static Screen screen;
+
+    /*
+     O HashMap trabalha com o conceito key-value pairs
+     Cada elemento possui uma chave(String) eu seu valor associado (Panel)
+     */
     private HashMap<String, Panel> panels;
     private String currentPanel = "";
 

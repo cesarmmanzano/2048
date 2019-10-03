@@ -12,6 +12,8 @@ public class Button {
 
     private State currentState = State.RELEASED;
     private Rectangle clickBox;
+    
+    //Linked List de ações do botão
     private LinkedList<ActionListener> actionListeners;
     private String text = "";
 
