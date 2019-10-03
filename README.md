@@ -6,9 +6,7 @@ Matheus Henrique Moretti
 Sobre o jogo:
 <br>
 - Movimentação com as setas ou com WASD;
-<br>
 - Quando dois valores de numeros iguais se encontram, eles viram um só, com a soma dos valores;
-<br>
 - Você ganha quando conseguir um bloco com valor de 2048.
 <br><br>
 Detalhes de projeto:
