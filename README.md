@@ -1,4 +1,5 @@
 # 2048
+## Desenvolvedores
 [Cesar Marrote Manzano](https://github.com/cesarmmanzano)
 <br>
 [Matheus Henrique Moretti](https://github.com/MatheusMoretti)
