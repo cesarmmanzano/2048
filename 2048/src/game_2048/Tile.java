@@ -42,6 +42,13 @@ public class Tile {
     private double inicialSize = 0.3; //Tamanho inicial do bloco na animação
     private BufferedImage combineImage;
 
+    private boolean beginAnimation2 = true;
+    private double renderSpeed2 = 0.1;
+    private BufferedImage startImage2;
+    private boolean frictionAnimation = false;
+    private double inicialSize2 = 1.1;
+    private BufferedImage frictionImage;
+
     //Para checar a combinação das peças
     private boolean canCombine = true;
 
@@ -58,17 +65,21 @@ public class Tile {
         //Animações
         startImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
         combineImage = new BufferedImage(WIDTH * 2, HEIGHT * 2, BufferedImage.TYPE_INT_ARGB);
+       
+        startImage2 = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        frictionImage = new BufferedImage(WIDTH * 2, HEIGHT * 2, BufferedImage.TYPE_INT_ARGB);
 
         drawTile(); //Desenha número desejado
     }
 
     //===========================UPDATE=======================================//
     public void update() {
-        animation();
+        combineAnimation();
+        frictionAnimation();
     }
 
     //============================ANIMATION===================================//
-    public void animation() {
+    public void combineAnimation() {
         if (beginAnimation) {
             AffineTransform transform = new AffineTransform();
             transform.translate(WIDTH / 2 - renderSpeed * WIDTH / 2, HEIGHT / 2 - renderSpeed * HEIGHT / 2);
@@ -102,12 +113,54 @@ public class Tile {
         }
     }
 
+    public void frictionAnimation() {
+        if (beginAnimation2) {
+            AffineTransform transform = new AffineTransform();
+            transform.translate(WIDTH / 2 - renderSpeed2 * WIDTH / 2, HEIGHT / 2 - renderSpeed2 * HEIGHT / 2);
+            transform.scale(renderSpeed2, renderSpeed2);
+            Graphics2D g2d = (Graphics2D) startImage2.getGraphics();
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            g2d.setColor(new Color(0, 0, 0, 0));
+            g2d.fillRect(0, 0, WIDTH, HEIGHT);
+            g2d.drawImage(startImage2, transform, null);
+            renderSpeed2 = renderSpeed2 + 0.1;
+            g2d.dispose();
+
+            if (renderSpeed2 >= 1.0) {
+                beginAnimation2 = false;
+            }
+        } else if (frictionAnimation) {
+            AffineTransform transform = new AffineTransform();
+            transform.translate(WIDTH / 2 - inicialSize2 * WIDTH / 2, HEIGHT / 2 - inicialSize2 * HEIGHT / 2);
+            transform.scale(inicialSize2, inicialSize2);
+            Graphics2D g2d = (Graphics2D) frictionImage.getGraphics();
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            g2d.setColor(new Color(0, 0, 0, 0));
+            g2d.fillRect(0, 0, WIDTH, HEIGHT);
+            g2d.drawImage(tileImage, transform, null);
+            inicialSize2 = inicialSize2 - 0.05;
+            g2d.dispose();
+
+            if (inicialSize2 <= 1.0) {
+                frictionAnimation = false;
+            }
+        }
+    }
+
     //============================DRAW========================================//
     public void draw(Graphics2D g) {
         if (beginAnimation) {
             g.drawImage(startImage, x, y, null);
         } else if (combineAnimation) {
             g.drawImage(combineImage, (int) (x + WIDTH / 2 - inicialSize * WIDTH / 2), (int) (y + HEIGHT / 2 - inicialSize * HEIGHT / 2), null);
+        } else {
+            g.drawImage(tileImage, x, y, null);
+        }
+
+        if (beginAnimation2) {
+            g.drawImage(startImage2, x, y, null);
+        } else if (frictionAnimation) {
+            g.drawImage(frictionImage, (int) (x + WIDTH / 2 - inicialSize2 * WIDTH / 2), (int) (y + HEIGHT / 2 - inicialSize2 * HEIGHT / 2), null);
         } else {
             g.drawImage(tileImage, x, y, null);
         }
@@ -239,5 +292,15 @@ public class Tile {
         }
     }
 
+    public boolean isFrictionAnimation() {
+        return frictionAnimation;
+    }
+
+    public void setFrictionAnimation(boolean frictionAnimation) {
+        this.frictionAnimation = frictionAnimation;
+        if (frictionAnimation) {
+            inicialSize2 = 1.1;
+        }
+    }
     //========================================================================//
 }
