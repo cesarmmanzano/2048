@@ -279,6 +279,7 @@ public class Gameboard extends HighScore {
 
                 currentScore = currentScore + board[Row][Col].getValue();
             } else {            //senao estiver vazio ou nao poder unir com outro tile
+                board[Row][Col].setFrictionAnimation(true);
                 move = false;
             }
         }
