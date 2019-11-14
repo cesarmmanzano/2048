@@ -18,6 +18,11 @@
 
     <string name="device">Device:</string>
     <string name="BotaoBack">BACK</string>
+    <string name="btn_1">Retorno</string>
+    <string name="btn_2">UP</string>
+    <string name="btn_3">LEFT</string>
+    <string name="btn_4">RIGHT</string>
+    <string name="btn_5">DOWN</string>
     <string-array name="devices">
         <item>CPU</item>
         <item>GPU</item>

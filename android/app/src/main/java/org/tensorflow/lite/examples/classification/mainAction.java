@@ -14,13 +14,10 @@ public class mainAction extends AppCompatActivity {
         setContentView(R.layout.activity_main_action);
     }
     //funcao teste
-    public void mathwe(View v){
-        Intent intent = new Intent (mainAction.this, CameraActivity.class);
-        startActivity(intent);
-
+    public void retornoCAM(View v){
+        super.onBackPressed();
         System.out.println("Ola galera zou matheus moredi");
     }
-}
 
     public void upmov(View v){
         System.out.println("Foi pra cima");
@@ -37,3 +34,5 @@ public class mainAction extends AppCompatActivity {
     public void downmov(View v){
         System.out.println("Foi pra baixo");
     }
+}
+
