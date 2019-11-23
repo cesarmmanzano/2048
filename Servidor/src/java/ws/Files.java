@@ -6,14 +6,18 @@ import java.io.FileWriter;
 import java.util.Formatter;
 import java.util.Scanner;
 
+
+//Cria arquivos para salvar a direcao desejada
 public class Files {
 
     public Files() {
 
     }
 
+    //Caminho que será salvo o arquivo
     static String path = "C:\\Users\\cesar\\Desktop\\Servidor\\src\\java\\direction.txt";
     
+    //Cria arquivo
     public static void createDir() {
         try {
             //Cria arquivo com sua localização e nome
@@ -30,7 +34,7 @@ public class Files {
 
     }
     
-    
+    //Pega a string do arquivo
     public static String loadDir() {
         String dir;
         try {
@@ -48,6 +52,8 @@ public class Files {
         return "";
     }
 
+    
+    //Modifica a direção
     public static boolean setDir(String Texto) {
         FileWriter output = null;
         try {
