@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+//Pega retorno da URL (direcao  do jogo)
 public class HttpReturn {
 
     private final String USER_AGENT = "Mozilla/5.0";
