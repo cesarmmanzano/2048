@@ -13,8 +13,10 @@ import pkg2048.Servidor.HttpReturn;
 //========================================================================//
 public class Gameboard extends HighScore{
 
+    //Usado para o microserviço
     HttpReturn mov = new HttpReturn();
     public StringBuffer movement = new StringBuffer();
+    
     //Direções
     public static final int LEFT = 0;
     public static final int RIGHT = 1;
@@ -595,6 +597,8 @@ public class Gameboard extends HighScore{
         }
     }
 
+    
+    //Movimenta o jogo de acordo com o que estiver escrito no arquivo
     public void checkWebServ() { //funcao chamada na Janela.java PARA rodar a hellokitty - thread
 
         // while (true) {
