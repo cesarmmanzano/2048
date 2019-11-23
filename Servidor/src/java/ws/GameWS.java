@@ -21,6 +21,7 @@ public class GameWS extends Files{
     public GameWS() {
     }
 
+    //Pega string contida na url e escreve no arquivo
     @GET
     @Produces("application/json")
     public String getDir() {
@@ -31,11 +32,12 @@ public class GameWS extends Files{
         return aux;
     }
     
+    
+    //Usado para o usuário escolher a opção desejada
     @POST
     @Consumes("application/json")
     @Path("direcao")
     public void putInserir(String content) {
         setDir(content);
-        //Var = content;
     }
 }
