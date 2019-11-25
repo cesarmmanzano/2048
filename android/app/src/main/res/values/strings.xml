@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TfLiteImageClassification</string>
+    <string name="app_name">Controlador 2048</string>
     <string name="description_info">Info</string>
     <string name="request_permission">This sample needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
@@ -23,6 +23,9 @@
     <string name="btn_3">LEFT</string>
     <string name="btn_4">RIGHT</string>
     <string name="btn_5">DOWN</string>
+    <string name="UserIP">Digite seu IP</string>
+    <string name="btn_IPConfirm">CONFIRMAR IP</string>
+    <string name="feedback">texto de feedback</string>
     <string-array name="devices">
         <item>CPU</item>
         <item>GPU</item>
