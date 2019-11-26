@@ -28,8 +28,17 @@ public class mainAction extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.editText);
         textView = (TextView) findViewById(R.id.textView);
 
+    }
 
-
+    public void verificarmovimento(String movimento){
+        HttpConnect movi = new HttpConnect(movimento);
+        try {
+            movi.execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     //funcao para retorno a camera
@@ -40,21 +49,25 @@ public class mainAction extends AppCompatActivity {
 
     //funçao mover para cima
     public void upmov(View v){
+        verificarmovimento("cima");
         textView.setText("Foi pra cima");
     }
 
     //funçao mover para esquerda
     public void leftmov(View v){
+        verificarmovimento("esquerda");
         textView.setText("Foi pra esquerda");
     }
 
     //funçao mover para direita
     public void rightmov(View v){
+        verificarmovimento("direita");
         textView.setText("Foi pra direita");
     }
 
     //funçao mover para baixo
     public void downmov(View v){
+        verificarmovimento("baixo");
         textView.setText("Foi pra baixo");
     }
 
@@ -63,5 +76,5 @@ public class mainAction extends AppCompatActivity {
         ip = textView.getText();
         System.out.println("IP confirmado: "+ip);
     }
-}
 
+}
