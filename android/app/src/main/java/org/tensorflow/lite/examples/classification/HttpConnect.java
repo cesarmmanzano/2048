@@ -13,7 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
-public class HttpConnect {
+public class HttpConnect extends AsyncTask<Void,Void,String> {
 
     public String data;
 
@@ -22,13 +22,13 @@ public class HttpConnect {
     }
 
     @Override
-    protected String doInBackground(Void... voids) {
+    protected String doInBackground(Void... voids)  {
         //log.i("teste",String);
         StringBuilder resposta= new StringBuilder();
 
         URL url= null;
         try {
-            url = new URL("http://192.168.0.135:8080/Servidor/webresources/2048");
+            url = new URL("http://192.168.0.135:8080/Servidor/webresources/2048/direcao");
 
 
             // Create the urlConnection

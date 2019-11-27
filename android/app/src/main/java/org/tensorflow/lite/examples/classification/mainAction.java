@@ -34,11 +34,9 @@ public class mainAction extends AppCompatActivity {
         HttpConnect movi = new HttpConnect(movimento);
         try {
             movi.execute().get();
-        } catch (ExecutionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        } 
     }
 
     //funcao para retorno a camera
@@ -49,25 +47,25 @@ public class mainAction extends AppCompatActivity {
 
     //funçao mover para cima
     public void upmov(View v){
-        verificarmovimento("cima");
+        verificarmovimento("up");
         textView.setText("Foi pra cima");
     }
 
     //funçao mover para esquerda
     public void leftmov(View v){
-        verificarmovimento("esquerda");
+        verificarmovimento("left");
         textView.setText("Foi pra esquerda");
     }
 
     //funçao mover para direita
     public void rightmov(View v){
-        verificarmovimento("direita");
+        verificarmovimento("right");
         textView.setText("Foi pra direita");
     }
 
     //funçao mover para baixo
     public void downmov(View v){
-        verificarmovimento("baixo");
+        verificarmovimento("down");
         textView.setText("Foi pra baixo");
     }
 
