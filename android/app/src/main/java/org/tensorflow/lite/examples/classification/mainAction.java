@@ -2,12 +2,12 @@ package org.tensorflow.lite.examples.classification;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import java.util.concurrent.ExecutionException;
 
 public class mainAction extends AppCompatActivity {
 
@@ -30,43 +30,40 @@ public class mainAction extends AppCompatActivity {
 
     }
 
-    public void verificarmovimento(String movimento){
-        HttpConnect movi = new HttpConnect(movimento);
+    public void verificarMovimento(String movimento){
+        HttpReturn mov = new HttpReturn(movimento);
         try {
-            movi.execute().get();
-        } catch (Exception e) {
+            mov.execute().get();
+        } catch (ExecutionException e) {
             e.printStackTrace();
-        } 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     //funcao para retorno a camera
     public void retornoCAM(View v){
         super.onBackPressed();
-        System.out.println("Ola galera zou matheus moredi");
     }
 
     //funçao mover para cima
     public void upmov(View v){
-        verificarmovimento("up");
-        textView.setText("Foi pra cima");
+        verificarMovimento("cima");
     }
 
     //funçao mover para esquerda
     public void leftmov(View v){
-        verificarmovimento("left");
-        textView.setText("Foi pra esquerda");
+        verificarMovimento("esquerda");
     }
 
     //funçao mover para direita
     public void rightmov(View v){
-        verificarmovimento("right");
-        textView.setText("Foi pra direita");
+        verificarMovimento("direita");
     }
 
     //funçao mover para baixo
     public void downmov(View v){
-        verificarmovimento("down");
-        textView.setText("Foi pra baixo");
+        verificarMovimento("baixo");
     }
 
     public void confirmIP(View v){

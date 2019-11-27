@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Controlador 2048</string>
+    <string name="app_name">2048</string>
     <string name="description_info">Info</string>
     <string name="request_permission">This sample needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
@@ -17,8 +17,8 @@
     </string-array>
 
     <string name="device">Device:</string>
-    <string name="BotaoBack">BACK</string>
-    <string name="btn_1">Retorno</string>
+    <string name="BotaoBack">Setas</string>
+    <string name="btn_1">Tensorflow</string>
     <string name="btn_2">UP</string>
     <string name="btn_3">LEFT</string>
     <string name="btn_4">RIGHT</string>

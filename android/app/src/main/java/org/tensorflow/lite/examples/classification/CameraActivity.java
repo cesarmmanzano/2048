@@ -660,13 +660,11 @@ public abstract class CameraActivity extends AppCompatActivity
     // Do nothing.
   }
 
-  public void Matheus(View v){
+  public void goDir(View v){
     Intent intent = new Intent(CameraActivity.this, mainAction.class);
 
     startActivity(intent);
 
-    System.out.println("Matheus: Helllllooooooo! Nao sei fodasse");
-
   }
 
-}
+  }
