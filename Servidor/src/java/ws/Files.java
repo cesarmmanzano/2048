@@ -15,8 +15,7 @@ public class Files {
     }
 
     //Caminho que será salvo o arquivo
-    static String path = "C:\\Users\\cesar\\Desktop\\Servidor\\src\\java\\direction.txt";
-    
+    static String path = "C:\\Users\\18051755\\Desktop\\2048-master\\Servidor\\src\\java\\direction.txt";
     //Cria arquivo
     public static void createDir() {
         try {
