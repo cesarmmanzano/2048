@@ -93,7 +93,7 @@ public class Gameboard extends HighScore{
         typedKeysRight();
         typedKeysUp();
         typedKeysDown();
-        //checkWebServ();
+        checkWebServ();
 
         if (currentScore >= highScore) {
             highScore = currentScore;
@@ -601,24 +601,19 @@ public class Gameboard extends HighScore{
     //Movimenta o jogo de acordo com o que estiver escrito no arquivo
     public void checkWebServ() { 
 
-        // while (true) {
         try {
             movement = mov.sendGet();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (movement.toString().contains("cima")) {
-
+        if (movement.toString().contains("cima") || movement.toString().contains("up")) {
             moveUp();
-        } else if (movement.toString().contains("baixo")) {
-
+        } else if (movement.toString().contains("baixo") || movement.toString().contains("down")) {
             moveDown();
-        } else if (movement.toString().contains("esquerda")) {
-
+        } else if (movement.toString().contains("esquerda") || movement.toString().contains("left")) {
             moveLeft();
-        } else if (movement.toString().contains("direita")) {
-
+        } else if (movement.toString().contains("direita") || movement.toString().contains("right")) {
             moveRight();
         }
 
