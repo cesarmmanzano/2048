@@ -25,4 +25,12 @@
 ## Jogar pelo localhost
 - Abrir o arquivo do servidor na IDE NetBeans 8.2 e executar o servidor;
 - Será aberto uma página contendo o site do localhost;
-- A partir daí escolha a aba 'direções' e digite a direção que deseja mover o jogo: cima, baixo, direita ou esquerda
+- A partir daí escolha a aba 'direções' e digite a direção que deseja mover o jogo: cima, baixo, direita ou esquerda;
+- Lembre-se de alterar o caminho que será salvo o arquivo.
+
+## Jogar pelo aplicativo
+- Abrir o arquivo no Android Studio e executar o aplicativo;
+- Você poderá jogar pela maquina virtual ou baixando o apk que será criado;
+- Lembre-se de alterar o IP usado (pode ser encontrado através da linha de comando 'ipconfig' no cmd do windows). Isso fará com que a conexão com o jogo funcione de maneira adequada;
+- Você poderá jogar pelas setas ou reconhecimento de imagem através do tensorflow.
+
