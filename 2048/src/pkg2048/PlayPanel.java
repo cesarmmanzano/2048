@@ -1,4 +1,4 @@
-package game_2048;
+package pkg2048;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PlayPanel extends Panel {
 
@@ -37,7 +39,7 @@ public class PlayPanel extends Panel {
         menu = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 380, largeButtonWidth, buttonHeight);
         playAgain = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 310, largeButtonWidth, buttonHeight);
         exit = new Button(Game.WIDTH / 2 - largeButtonWidth / 2, 450, largeButtonWidth, buttonHeight);
-        
+
         newGame = new Button(Game.WIDTH / 2 - 130 / 2 + 150, 20, 130, buttonHeight);
         easterEgg = new Button(Game.WIDTH / 2 - 150 / 2 + 150, 20, 150, buttonHeight);
 
@@ -45,10 +47,9 @@ public class PlayPanel extends Panel {
         menu.setText("Voltar para o Menu");
         playAgain.setText("Tentar Novamente");
         exit.setText("Sair");
-        
+
         newGame.setText("Novo Jogo");
         easterEgg.setText("");
-        
 
         //Ações ao clicar sobre o botão de jogar novamente
         playAgain.addActionListener(new ActionListener() {
@@ -89,7 +90,7 @@ public class PlayPanel extends Panel {
             }
         });
         add(easterEgg);
-        
+
         //Ações ao clicar sobre o botão de novo jogo
         newGame.addActionListener(new ActionListener() {
             @Override
@@ -131,6 +132,7 @@ public class PlayPanel extends Panel {
     @Override
     public void update() {
         board.update();
+
         if (board.checkDead()) {
             opacity++;
             if (opacity > 170) {

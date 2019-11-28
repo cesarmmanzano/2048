@@ -1,4 +1,4 @@
-package game_2048;
+package pkg2048;
 
 import java.awt.Color;
 import java.awt.Font;

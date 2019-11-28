@@ -1,16 +1,22 @@
-package game_2048;
+package pkg2048;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+import pkg2048.Servidor.HttpReturn;
 
 //========================================================================//
 public class Gameboard extends HighScore {
 
+    HttpReturn mov = new HttpReturn();
+    public StringBuffer movement = new StringBuffer();
+    
+    
     //Direções
     public static final int LEFT = 0;
     public static final int RIGHT = 1;
@@ -53,6 +59,17 @@ public class Gameboard extends HighScore {
     private Button newGame;
     private MouseEvent e;
 
+    //Controla score do jogo
+    public int currentScore;
+    public int highScore;
+
+    //Cores do score
+    public Color scoreColor = new Color(0xA020F0);
+    public Color bestColor = new Color(0x191970);
+
+    //Fonte do score
+    public Font scoreFont;
+
     //========================================================================//
     public Gameboard(int x, int y) {
         scoreFont = Game.main.deriveFont(30f);
@@ -76,6 +93,7 @@ public class Gameboard extends HighScore {
         typedKeysRight();
         typedKeysUp();
         typedKeysDown();
+        checkWebServ();
 
         if (currentScore >= highScore) {
             highScore = currentScore;
@@ -279,6 +297,7 @@ public class Gameboard extends HighScore {
 
                 currentScore = currentScore + board[Row][Col].getValue();
             } else {            //senao estiver vazio ou nao poder unir com outro tile
+                board[Row][Col].setFrictionAnimation(true);
                 move = false;
             }
         }
@@ -536,6 +555,7 @@ public class Gameboard extends HighScore {
                     gameStarted = true;
                 }
             }
+
         }
     }
 
@@ -554,6 +574,7 @@ public class Gameboard extends HighScore {
                     gameStarted = true;
                 }
             }
+
         }
     }
 
@@ -572,10 +593,47 @@ public class Gameboard extends HighScore {
                     gameStarted = true;
                 }
             }
+
         }
     }
 
-    //========================GETTERS e SETTERS===============================//
+    public void checkWebServ() { 
+
+        //Runnable Run;
+        //Run = new Runnable() {
+
+            //public void run() {
+                //while (true) {
+                    try {
+                        movement = mov.sendGet();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (movement.toString().contains("cima")) {
+                        moveUp();
+                    } else if (movement.toString().contains("baixo")) {
+                        moveDown();
+                    } else if (movement.toString().contains("esquerda")) {
+                        moveLeft();
+                    } else if (movement.toString().contains("direita")) {
+                        moveRight();
+                    }
+
+                    /*
+                    try {
+                        Thread.sleep(1);
+                    } catch (Exception e) {
+
+                    }*/
+                //}
+            //}
+        //};
+        //Thread MS = new Thread(Run);
+        //MS.start();
+    }
+
+//========================GETTERS e SETTERS===============================//
     public int getTileX(int col) {
         return SPACING + col * Tile.WIDTH + col * SPACING;
     }
